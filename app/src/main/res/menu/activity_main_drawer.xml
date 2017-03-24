@@ -10,7 +10,7 @@
             Isso aqui é um teste
         */
         <item
-            android:id="@+id/nav_editr"
+            android:id="@+id/nav_editar"
             android:icon="@android:drawable/ic_menu_edit"
             android:title="Editar Denúncias" />
         /*
