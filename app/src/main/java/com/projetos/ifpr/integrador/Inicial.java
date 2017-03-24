@@ -79,15 +79,15 @@ public class Inicial extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_buscar) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_editar) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_preferencias) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_mapa) {
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_call) {
 
         }
 
