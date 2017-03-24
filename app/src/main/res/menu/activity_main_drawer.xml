@@ -13,6 +13,9 @@
             android:id="@+id/nav_editr"
             android:icon="@android:drawable/ic_menu_edit"
             android:title="Editar Denúncias" />
+        /*
+            Este eh outro teste
+        */
         <item
             android:id="@+id/nav_preferencias"
             android:icon="@android:drawable/ic_menu_preferences"
