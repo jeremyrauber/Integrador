@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.projetos.ifpr.integrador">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme.NoActionBar">
+
+
+        <activity android:name="com.projetos.ifpr.integrador.MainActivity"
+            android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Declaracao da Activity da tela de  cadastro -->
+        <activity android:name="com.projetos.ifpr.integrador.Cadastro"
+            android:label="Cadastro "
+            android:theme="@style/AppTheme"
+            ></activity>
+
+        <!-- Declaracao da Activity Inicial-->
+        <activity android:name="com.projetos.ifpr.integrador.Inicial"
+            android:label="Inicial "
+            ></activity>
+
+        <!-- Declaracao da Activity da tela de cadastro -->
+        <activity
+            android:name="com.projetos.ifpr.integrador.Consulta"
+            android:label="Consulta "
+            android:parentActivityName="com.projetos.ifpr.integrador.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.projetos.ifpr.integrador.MainActivity" />
+        </activity>
+
+    </application>
+
+</manifest>

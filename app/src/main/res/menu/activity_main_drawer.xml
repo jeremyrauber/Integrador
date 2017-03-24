@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_camera"
+            android:icon="@android:drawable/ic_menu_search"
+            android:title="Procurar Denúncias" />
+        <item
+            android:id="@+id/nav_gallery"
+            android:icon="@android:drawable/ic_menu_edit"
+            android:title="Editar Denúncias" />
+        <item
+            android:id="@+id/nav_slideshow"
+            android:icon="@android:drawable/ic_menu_preferences"
+            android:title="Preferências" />
+        <item
+            android:id="@+id/nav_manage"
+            android:icon="@android:drawable/ic_menu_compass"
+            android:title="Mapa de Incidências" />
+        <item
+            android:id="@+id/nav_call"
+            android:icon="@android:drawable/ic_menu_call"
+            android:title="Disque Denúnica" />
+    </group>
+    <item android:title="Informações">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@android:drawable/ic_dialog_info"
+                android:title="Desenvolvido pelos melhores" />
+        </menu>
+    </item>
+
+</menu>
