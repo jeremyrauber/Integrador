@@ -7,7 +7,7 @@
             android:icon="@android:drawable/ic_menu_search"
             android:title="Procurar Denúncias" />
         <item
-            android:id="@+id/nav_editar"
+            android:id="@+id/nav_editr"
             android:icon="@android:drawable/ic_menu_edit"
             android:title="Editar Denúncias" />
         <item
