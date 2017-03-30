@@ -28,7 +28,7 @@ public class Cadastro extends AppCompatActivity {
     EditText nome, login, senha;
 
 
-    //comentario by jeremy
+    //comentario by jeremy22
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
