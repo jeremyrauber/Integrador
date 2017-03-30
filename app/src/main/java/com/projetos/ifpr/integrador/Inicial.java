@@ -130,7 +130,7 @@ public class Inicial extends AppCompatActivity
         } else if (id == R.id.nav_mapa) {
             fragmentClass = FragmentMapa.class;
         } else if (id == R.id.nav_call) {
-           // fragmentClass = FragmentChamadas.class;
+           // fragmentClass = FragmentChamadas.class; acho q nao precisa abrir novo fragment
             call();
 
         }
