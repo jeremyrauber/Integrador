@@ -1,9 +1,13 @@
 package com.projetos.ifpr.integrador;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -12,8 +16,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.projetos.ifpr.integrador.Fragments.FragmentBuscar;
+import com.projetos.ifpr.integrador.Fragments.FragmentChamadas;
+import com.projetos.ifpr.integrador.Fragments.FragmentEditar;
+import com.projetos.ifpr.integrador.Fragments.FragmentMapa;
+import com.projetos.ifpr.integrador.Fragments.FragmentPreferencias;
+
 public class Inicial extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, FragmentBuscar.OnFragmentInteractionListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +32,23 @@ public class Inicial extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+        /* botao que tem tres pontos...
+        if (savedInstanceState == null) {
+            FragmentEditar fragment = null;
+            Class fragmentClass = null;
+            fragmentClass = FragmentOne.class;
+            try {
+                fragment = (FragmentEditar) fragmentClass.newInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        } */
+
+        // INICIALIZACAO menubar LATERAL
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,7 +77,7 @@ public class Inicial extends AppCompatActivity
             super.onBackPressed();
         }
     }
-/*
+/* menu que não será usado
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -73,26 +100,47 @@ public class Inicial extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }*/
 
+
+
+    // ACOES NO MENUBAR LATERAL
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        Fragment fragment = null;
+        Class fragmentClass = null;
 
         if (id == R.id.nav_buscar) {
-            // Handle the camera action
+            fragmentClass = FragmentBuscar.class;
         } else if (id == R.id.nav_editar) {
-
+            fragmentClass = FragmentEditar.class;
         } else if (id == R.id.nav_preferencias) {
-
+            fragmentClass = FragmentPreferencias.class;
         } else if (id == R.id.nav_mapa) {
-
+            fragmentClass = FragmentMapa.class;
         } else if (id == R.id.nav_call) {
-
+            fragmentClass = FragmentChamadas.class;
         }
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                            .replace(R.id.flContent, fragment)
+                                .addToBackStack(null)
+                                    .commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }

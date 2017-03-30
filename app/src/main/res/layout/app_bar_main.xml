@@ -23,6 +23,14 @@
 
     <include layout="@layout/content_main" />
 
+   <!-- layout do menu de tres pontos... -->
+     <FrameLayout
+        android:id="@+id/flContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"/>
+
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
 
