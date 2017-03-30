@@ -1,13 +1,19 @@
 package com.projetos.ifpr.integrador;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -15,6 +21,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.projetos.ifpr.integrador.Fragments.FragmentBuscar;
 import com.projetos.ifpr.integrador.Fragments.FragmentChamadas;
@@ -23,7 +30,11 @@ import com.projetos.ifpr.integrador.Fragments.FragmentMapa;
 import com.projetos.ifpr.integrador.Fragments.FragmentPreferencias;
 
 public class Inicial extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, FragmentBuscar.OnFragmentInteractionListener{
+        implements NavigationView.OnNavigationItemSelectedListener, FragmentBuscar.OnFragmentInteractionListener {
+
+
+    private static final int PERMISSIONS_REQUEST_PHONE_CALL = 100;
+    private static String[] PERMISSIONS_PHONECALL = {Manifest.permission.CALL_PHONE};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +112,6 @@ public class Inicial extends AppCompatActivity
     }*/
 
 
-
     // ACOES NO MENUBAR LATERAL
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -120,19 +130,22 @@ public class Inicial extends AppCompatActivity
         } else if (id == R.id.nav_mapa) {
             fragmentClass = FragmentMapa.class;
         } else if (id == R.id.nav_call) {
-            fragmentClass = FragmentChamadas.class;
+           // fragmentClass = FragmentChamadas.class;
+            call();
+
         }
+
         try {
             fragment = (Fragment) fragmentClass.newInstance();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                            .replace(R.id.flContent, fragment)
-                                .addToBackStack(null)
-                                    .commit();
+        if(fragmentClass!=null) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.flContent, fragment)
+                    .commit();
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -143,4 +156,34 @@ public class Inicial extends AppCompatActivity
     public void onFragmentInteraction(Uri uri) {
 
     }
+
+    // DOIDERA PARA FAZER LIGACAUM
+
+    private void call() {
+        // Check the SDK version and whether the permission is already granted or not.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, PERMISSIONS_REQUEST_PHONE_CALL);
+        } else {
+            //Open call function
+            String number = "91324567";
+            Intent intent = new Intent(Intent.ACTION_CALL);
+            intent.setData(Uri.parse("tel:" + number));
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        if (requestCode == PERMISSIONS_REQUEST_PHONE_CALL) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission is granted
+                call();
+            } else {
+                Toast.makeText(this, "Desculpe!!! Permissão Negada", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    // FIM DA DOIDERA PARA FAZER LIGACAUM
 }

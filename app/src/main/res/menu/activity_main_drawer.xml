@@ -6,16 +6,11 @@
             android:id="@+id/nav_buscar"
             android:icon="@android:drawable/ic_menu_search"
             android:title="Procurar Denúncias" />
-        /*
-            Isso aqui é um teste
-        */
+
         <item
             android:id="@+id/nav_editar"
             android:icon="@android:drawable/ic_menu_edit"
             android:title="Editar Denúncias" />
-        /*
-            Este eh outro teste
-        */
         <item
             android:id="@+id/nav_preferencias"
             android:icon="@android:drawable/ic_menu_preferences"
