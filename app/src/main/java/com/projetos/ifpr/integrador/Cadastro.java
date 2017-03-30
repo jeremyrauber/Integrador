@@ -31,6 +31,7 @@ public class Cadastro extends AppCompatActivity {
 
 
     //comentario by jeremy22
+    //dlksajodijasd
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
