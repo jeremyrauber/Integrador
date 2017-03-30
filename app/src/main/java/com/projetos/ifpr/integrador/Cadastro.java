@@ -27,6 +27,8 @@ import cz.msebera.android.httpclient.util.EntityUtils;
 public class Cadastro extends AppCompatActivity {
     EditText nome, login, senha;
 
+
+    //comentario by jeremy
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
