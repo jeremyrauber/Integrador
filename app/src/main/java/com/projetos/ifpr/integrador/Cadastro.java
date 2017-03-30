@@ -24,6 +24,8 @@ import cz.msebera.android.httpclient.impl.client.HttpClientBuilder;
 import cz.msebera.android.httpclient.message.BasicNameValuePair;
 import cz.msebera.android.httpclient.util.EntityUtils;
 
+//testando push
+
 public class Cadastro extends AppCompatActivity {
     EditText nome, login, senha;
 
