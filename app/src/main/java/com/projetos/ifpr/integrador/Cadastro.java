@@ -90,8 +90,6 @@ public class Cadastro extends AppCompatActivity {
             1-mensagem
          */
 
-
-
         @Override
         protected String doInBackground(String... params) {
             HttpClient cliente = HttpClientBuilder.create().build();

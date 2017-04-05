@@ -57,7 +57,7 @@ public class Inicial extends AppCompatActivity
 
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-        } */
+        }
 
         // INICIALIZACAO menubar LATERAL
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -68,6 +68,7 @@ public class Inicial extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });
+        */
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

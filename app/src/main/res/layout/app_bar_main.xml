@@ -24,22 +24,10 @@
     <include layout="@layout/content_main" />
 
    <!-- layout do menu de tres pontos... -->
-     <FrameLayout
-        android:id="@+id/flContent"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"/>
-
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-
-        android:background="@android:color/darker_gray"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_input_add"
-        android:tint="@android:color/white"/>
+    <FrameLayout
+       android:id="@+id/flContent"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:layout_marginTop="?attr/actionBarSize" />
 
 </android.support.design.widget.CoordinatorLayout>
