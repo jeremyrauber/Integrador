@@ -142,21 +142,20 @@
                 android:id="@+id/btnReduzFonte"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:background="@android:drawable/ic_input_add"
-                android:tint="@android:color/black"
+                android:layout_marginRight="50dp"
+                android:layout_alignEnd="@+id/textView3"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"
-                android:layout_toStartOf="@+id/btnAumentaFonte"/>
-                android:layout_toStartOf="@+id/btnAumentaFonte"/>
+                android:background="@android:drawable/arrow_down_float"
+                android:backgroundTint="@color/colorPrimary"
+                android:tint="@android:color/darker_gray"/>
 
             <Button
                 android:id="@+id/btnAumentaFonte"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_alignBaseline="@+id/btnReduzFonte"
                 android:layout_alignEnd="@+id/textView3"
                 android:layout_centerVertical="true"
-                android:background="@android:drawable/ic_input_add"
+                android:background="@android:drawable/arrow_up_float"
                 android:backgroundTint="@color/colorPrimary"
                 android:tint="@android:color/darker_gray"/>
 

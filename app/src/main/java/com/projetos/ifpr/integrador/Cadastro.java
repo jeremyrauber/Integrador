@@ -50,7 +50,7 @@ public class Cadastro extends AppCompatActivity {
 
                System.out.println( nome.getText().toString()+ " | "+ login.getText().toString()+ " | "+ senha.getText().toString());
 
-                ChamadaWeb chamada = new ChamadaWeb("http://10.0.2.2:8080/WebServiceProjetoIntegrador/rest/servicos/cadastro", nome.getText().toString(), login.getText().toString(), senha.getText().toString(),2);
+                ChamadaWeb chamada = new ChamadaWeb("http://10.0.2.2:8090/IntegradorWS/rest/servicos/cadastro", nome.getText().toString(), login.getText().toString(), senha.getText().toString(),2);
                 chamada.execute();
             }
         });

@@ -42,10 +42,13 @@ public class MainActivity extends AppCompatActivity {
         Button btnLogar = (Button) findViewById(R.id.btnLogar);
         Button btnCadastrar = (Button) findViewById(R.id.btnCadastrar);
 
+        //"http://10.0.2.2:8090/IntegradorWS/rest/servicos/login"
+
+
         btnLogar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ChamadaWeb chamada = new ChamadaWeb("http://10.0.2.2:8080/WebServiceProjetoIntegrador/rest/servicos/login",
+                    ChamadaWeb chamada = new ChamadaWeb("http://10.0.2.2:8090/IntegradorWS/rest/servicos/login",
                             "", login.getText().toString(), senha.getText().toString(), 2);
                     chamada.execute();
                 }
