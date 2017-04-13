@@ -5,7 +5,7 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">#3366ff</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -27,5 +27,6 @@
         <item name="android:colorForeground">#42221f1f
         </item>
     </style>
+
 
 </resources>
