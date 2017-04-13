@@ -6,27 +6,21 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.projetos.ifpr.integrador.Fragments.FragmentBuscar;
-import com.projetos.ifpr.integrador.Fragments.FragmentChamadas;
 import com.projetos.ifpr.integrador.Fragments.FragmentEditar;
-import com.projetos.ifpr.integrador.Fragments.FragmentMapa;
+import com.projetos.ifpr.integrador.Fragments.FragmentHeatMap;
 import com.projetos.ifpr.integrador.Fragments.FragmentPreferencias;
 
 public class Inicial extends AppCompatActivity
@@ -129,7 +123,7 @@ public class Inicial extends AppCompatActivity
         } else if (id == R.id.nav_preferencias) {
             fragmentClass = FragmentPreferencias.class;
         } else if (id == R.id.nav_mapa) {
-            fragmentClass = FragmentMapa.class;
+            fragmentClass = FragmentHeatMap.class;
         } else if (id == R.id.nav_call) {
            // fragmentClass = FragmentChamadas.class; acho q nao precisa abrir novo fragment
             call();
