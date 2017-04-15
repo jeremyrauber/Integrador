@@ -1,11 +1,19 @@
 package com.projetos.ifpr.integrador.Fragments;
 
+import android.app.AlertDialog;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.graphics.Color;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,7 +21,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -24,6 +35,7 @@ import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.maps.android.heatmaps.Gradient;
 import com.google.maps.android.heatmaps.HeatmapTileProvider;
+import com.projetos.ifpr.integrador.Coordenadas;
 import com.projetos.ifpr.integrador.Inicial;
 import com.projetos.ifpr.integrador.R;
 
@@ -99,13 +111,21 @@ public class FragmentMapa extends FragmentActivity  implements OnMapReadyCallbac
     protected TextView mLongitudeText;
     protected GoogleApiClient mGoogleApiClient;
 
+    LocationManager glocManager;
+    android.location.LocationListener glocListener;
+    LocationManager nlocManager;
+    android.location.LocationListener nlocListener;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.heatmaps_demo);
 
-        ChamadaWeb chamada = new ChamadaWeb("http://10.0.2.2:8090/IntegradorWS/rest/servicos/consultaMapaCalor");
+        ChamadaWeb chamada = new ChamadaWeb("http://192.168.0.10:8090/IntegradorWS/rest/servicos/consultaMapaCalor");
         chamada.execute();
+
+        Coordenadas coordenadas = new Coordenadas();
+        coordenadas.onCreate();
     }
 
     @Override
@@ -285,5 +305,137 @@ public class FragmentMapa extends FragmentActivity  implements OnMapReadyCallbac
             }
         }
     }
+
+    /******************BUDEGA DA LOCALIZACAO ********************/
+    @Override
+    public void onDestroy() {
+
+        //Remove GPS location update
+        if(glocManager != null){
+            glocManager.removeUpdates(glocListener);
+            Log.d("ServiceForLatLng", "GPS Update Released");
+        }
+
+        //Remove Network location update
+        if(nlocManager != null){
+            nlocManager.removeUpdates(nlocListener);
+            Log.d("ServiceForLatLng", "Network Update Released");
+        }
+        super.onDestroy();
+    }
+
+    //This is for Lat lng which is determine by your wireless or mobile network
+    public class MyLocationListenerNetWork implements android.location.LocationListener
+    {
+        @Override
+        public void onLocationChanged(Location loc)
+        {
+            double nlat = loc.getLatitude();
+            double nlng = loc.getLongitude();
+
+            //Setting the Network Lat, Lng into the textView
+            Toast.makeText(FragmentMapa.this, nlat+"|"+nlng, Toast.LENGTH_SHORT).show();
+
+            Log.d("LAT & LNG Network:", nlat + " " + nlng);
+        }
+
+        @Override
+        public void onProviderDisabled(String provider)
+        {
+            Log.d("LOG", "Network is OFF!");
+        }
+        @Override
+        public void onProviderEnabled(String provider)
+        {
+            Log.d("LOG", "Thanks for enabling Network !");
+        }
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras)
+        {
+        }
+    }
+
+    public class MyLocationListenerGPS implements android.location.LocationListener
+    {
+        @Override
+        public void onLocationChanged(Location loc)
+        {
+           double glat = loc.getLatitude();
+           double glng = loc.getLongitude();
+
+            //Setting the GPS Lat, Lng into the textView
+            Toast.makeText(FragmentMapa.this, glat+" | "+glng, Toast.LENGTH_SHORT).show();
+
+            Log.d("LAT & LNG GPS:", glat + " " + glng);
+        }
+
+        @Override
+        public void onProviderDisabled(String provider)
+        {
+            Log.d("LOG", "GPS is OFF!");
+        }
+        @Override
+        public void onProviderEnabled(String provider)
+        {
+            Log.d("LOG", "Thanks for enabling GPS !");
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras)
+        {
+        }
+    }
+
+    public void showLoc(View v) {
+
+        //Location access ON or OFF checking
+        ContentResolver contentResolver = getBaseContext().getContentResolver();
+        boolean gpsStatus = Settings.Secure.isLocationProviderEnabled(contentResolver, LocationManager.GPS_PROVIDER);
+        boolean networkWifiStatus = Settings.Secure.isLocationProviderEnabled(contentResolver, LocationManager.NETWORK_PROVIDER);
+
+        //If GPS and Network location is not accessible show an alert and ask user to enable both
+        if(!gpsStatus || !networkWifiStatus)
+        {
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(FragmentMapa.this);
+
+            alertDialog.setTitle("Make your location accessible ...");
+            alertDialog.setMessage("Your Location is not accessible to us.To show location you have to enable it.");
+            //alertDialog.setIcon(R.drawable.warning);
+
+            alertDialog.setNegativeButton("Enable", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    startActivityForResult(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0);
+                }
+            });
+
+            alertDialog.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog,int which) {
+                    Toast.makeText(getApplicationContext(), "Remember to show location you have to eanable it !", Toast.LENGTH_SHORT).show();
+                    dialog.cancel();
+                }
+            });
+
+            alertDialog.show();
+        }
+        //IF GPS and Network location is accessible
+        else
+        {
+            nlocManager   = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+            nlocListener = new MyLocationListenerNetWork();
+            nlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+                    1000 * 1,  // 1 Sec
+                    0,         // 0 meter
+                    nlocListener);
+
+
+            glocManager  = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+            glocListener = new MyLocationListenerGPS();
+            glocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                    1000 * 1,  // 1 Sec
+                    0,         // 0 meter
+                    glocListener);
+        }
+    }
+
 
 }

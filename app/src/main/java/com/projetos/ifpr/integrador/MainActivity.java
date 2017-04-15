@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         btnLogar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ChamadaWeb chamada = new ChamadaWeb("http://10.0.2.2:8090/IntegradorWS/rest/servicos/login",
+                    ChamadaWeb chamada = new ChamadaWeb("http://192.168.0.10:8090/IntegradorWS/rest/servicos/login",
                             "", login.getText().toString(), senha.getText().toString(), 2);
                     chamada.execute();
                 }

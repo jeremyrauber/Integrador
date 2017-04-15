@@ -37,7 +37,7 @@ public class Consulta extends AppCompatActivity {
         Intent intent = getIntent();
         String idUsuario = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
 
-        ChamadaWeb chamada = new ChamadaWeb("http://10.0.2.2:8090/IntegradorWS/rest/servicos/consulta",idUsuario);
+        ChamadaWeb chamada = new ChamadaWeb("http://192.168.0.10:8090/IntegradorWS/rest/servicos/consulta",idUsuario);
         chamada.execute();
 
         Button btnInicial = (Button) findViewById(R.id.btnInicial);
