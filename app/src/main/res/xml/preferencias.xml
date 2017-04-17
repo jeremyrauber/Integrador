@@ -1,0 +1,60 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="Opcoes Gerais"
+        android:key="pref_key_storage_settings">
+        <CheckBoxPreference
+            android:key="pref_key_rede"
+            android:title="Utilizar dados da rede 3G/4G"
+            android:summary="Esta opção pode implicar em gastos"
+            android:defaultValue="false"/>
+
+        <CheckBoxPreference
+            android:key="pref_key_ligacoes"
+            android:title="Permitir efetuar ligações"
+            android:summary="Esta opção pode implicar em gastos"
+            android:defaultValue="false"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Privacidade"
+        android:key="pref_key_storage_settings">
+
+        <CheckBoxPreference
+            android:key="pref_key_anonimo"
+            android:title="Denunciar Anonimamente"
+            android:summary="Esta opção pode garente seu sigilo"
+            android:defaultValue="false"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Notificações"
+        android:key="pref_key_storage_settings">
+
+        <CheckBoxPreference
+            android:key="pref_key_not_visuais"
+            android:title="Ativar notificações visuais"
+            android:summary="Mostra notificações do aplicativo"
+            android:defaultValue="false"/>
+
+        <CheckBoxPreference
+            android:key="pref_key_not_sonoras"
+            android:title="Ativar notificações sonoras"
+            android:summary="Mostra notificações do aplicativo"
+            android:defaultValue="false"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Visualização"
+        android:key="pref_key_storage_tamanhoFonte">
+
+        <ListPreference
+            android:defaultValue="12"
+            android:entries="@array/pref_example_list_titles"
+            android:entryValues="@array/pref_example_list_values"
+            android:key="pref_key_fonte"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:summary="Altera tamanho da fonte do texto do aplicativo"
+            android:title="Tamanho da fonte" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
+

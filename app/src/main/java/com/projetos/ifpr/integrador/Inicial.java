@@ -16,6 +16,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.projetos.ifpr.integrador.Fragments.FragmentBuscar;
@@ -72,7 +73,9 @@ public class Inicial extends AppCompatActivity
         } else if (id == R.id.nav_editar) {
             fragmentClass = FragmentEditar.class;
         } else if (id == R.id.nav_preferencias) {
-            fragmentClass = FragmentPreferencias.class;
+            Intent intent = new Intent(this, FragmentPreferencias.class);
+            finish();
+            startActivity(intent);
         } else if (id == R.id.nav_mapa) {
             Intent intent = new Intent(this, FragmentMapa.class);
             finish();
@@ -130,6 +133,9 @@ public class Inicial extends AppCompatActivity
             }
         }
     }
-
+    public void abrirDenuncia(View view){
+        Intent  i = new Intent(getApplicationContext(),Denuncia.class);
+        startActivity(i);
+    }
     // FIM DA DOIDERA PARA FAZER LIGACAUM
 }

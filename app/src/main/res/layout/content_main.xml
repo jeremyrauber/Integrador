@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
+    android:layout_margin="10dp"
     android:orientation="vertical"
     android:id="@+id/paginaInicial"
     tools:context="com.projetos.ifpr.integrador.Inicial"
@@ -12,61 +13,82 @@
 
     <ImageView
         android:id="@+id/imageView1"
-        android:layout_marginTop="100dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginBottom="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@drawable/imagem2" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:foregroundGravity="center"
+        android:text="Classificação das suas denúncias"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="110dp">
+        android:layout_gravity="center"
+        android:gravity="center">
+
 
         <ImageView
             android:id="@+id/pontuacaoUsuario1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/nav_header_vertical_spacing"
-            android:src="@android:drawable/btn_star_big_on" />
+            android:layout_gravity="center"
+            android:foregroundGravity="center"
+            android:layout_margin="10dp"
+            android:tint="@android:color/holo_blue_dark"
+            android:src="@drawable/ic_thumb_up_black_24dp" />
+
+        <TextView
+            android:id="@+id/likes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:foregroundGravity="center"
+            android:text=" 100" />
+
         <ImageView
             android:id="@+id/pontuacaoUsuario2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/nav_header_vertical_spacing"
-            android:src="@android:drawable/btn_star_big_on" />
-        <ImageView
-            android:id="@+id/pontuacaoUsuario3"
+            android:layout_margin="10dp"
+            android:tint="@android:color/black"
+            android:src="@drawable/ic_thumb_down_black_24dp" />
+
+        <TextView
+            android:id="@+id/dislikes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/nav_header_vertical_spacing"
-            android:src="@android:drawable/btn_star_big_on" />
-        <ImageView
-            android:id="@+id/pontuacaoUsuario4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/nav_header_vertical_spacing"
-            android:src="@android:drawable/btn_star_big_on" />
-        <ImageView
-            android:id="@+id/pontuacaoUsuario5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/nav_header_vertical_spacing"
-            android:src="@android:drawable/btn_star_big_off" />
+            android:layout_gravity="center"
+            android:foregroundGravity="center"
+            android:text="  100" />
 
     </LinearLayout>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Hello World!" />
+        android:layout_margin="10dp"
+        android:text="Adicionar Denúncia" />
+
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="+"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:contentDescription="addDenuncia"
         android:padding="10dp"
         android:layout_gravity="center"
         android:textAlignment="center"
+        android:background="@drawable/ic_add_black_24dp"
+        android:backgroundTint="@android:color/black"
+        android:onClick="abrirDenuncia"
         />
+
+
 
 
 

@@ -70,7 +70,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.projetos.ifpr.integrador.MainActivity" />
         </activity>
+
         <activity android:name=".Fragments.FragmentMapa"/>
+
+        <activity android:name=".Fragments.FragmentPreferencias"/>
+
+
+        <activity android:name=".ConfiguracaoServidor"/>
+
+        <activity android:name=".Denuncia"/>
     </application>
 
 </manifest>

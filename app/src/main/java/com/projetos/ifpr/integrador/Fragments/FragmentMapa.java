@@ -5,7 +5,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
@@ -18,13 +17,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationServices;
+import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -35,8 +29,9 @@ import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.maps.android.heatmaps.Gradient;
 import com.google.maps.android.heatmaps.HeatmapTileProvider;
-import com.projetos.ifpr.integrador.Coordenadas;
+import com.projetos.ifpr.integrador.ConfiguracaoServidor;
 import com.projetos.ifpr.integrador.Inicial;
+import com.projetos.ifpr.integrador.MainActivity;
 import com.projetos.ifpr.integrador.R;
 
 import org.json.JSONArray;
@@ -94,7 +89,7 @@ public class FragmentMapa extends FragmentActivity  implements OnMapReadyCallbac
     private boolean mDefaultOpacity = true;
     private String pontosFromWebService;
     private boolean variavelControleInternet;
-    LatLng myPosition;
+    private boolean variavelControleGpsON = true;
 
 
     /**
@@ -103,44 +98,41 @@ public class FragmentMapa extends FragmentActivity  implements OnMapReadyCallbac
      */
     private HashMap<String, DataSet> mLists = new HashMap<String, DataSet>();
 
-    protected Location mLastLocation;
-
-    protected String mLatitudeLabel;
-    protected String mLongitudeLabel;
-    protected TextView mLatitudeText;
-    protected TextView mLongitudeText;
-    protected GoogleApiClient mGoogleApiClient;
 
     LocationManager glocManager;
     android.location.LocationListener glocListener;
     LocationManager nlocManager;
     android.location.LocationListener nlocListener;
+    private double glat;
+    private double glng;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.heatmaps_demo);
 
-        ChamadaWeb chamada = new ChamadaWeb("http://192.168.0.10:8090/IntegradorWS/rest/servicos/consultaMapaCalor");
+        ChamadaWeb chamada = new ChamadaWeb("http://"+
+                ConfiguracaoServidor.retornarEnderecoServidor(this)
+                +":8090/IntegradorWS/rest/servicos/consultaMapaCalor");
         chamada.execute();
 
-        Coordenadas coordenadas = new Coordenadas();
-        coordenadas.onCreate();
+        showLoc();
     }
 
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(this,Inicial.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
+        finish();
     }
 
     protected void startDemo() {
 
-        LatLng FozdoIguacu = new LatLng(-25.5469,-54.5882);
+        Toast.makeText(FragmentMapa.this, "Lat:"+ String.format("%.04f", glat)+"| Lng:"+String.format("%.04f", glng), Toast.LENGTH_SHORT).show();
+        LatLng FozdoIguacu = new LatLng(glat,glng);
 
-        mMap.addMarker(new MarkerOptions().position(FozdoIguacu).title("Marcador em Foz do Iguaçu"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(FozdoIguacu, 10));
+        mMap.addMarker(new MarkerOptions().position(FozdoIguacu).title("Sua Localização"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(FozdoIguacu, 13));
 
 
         // Set up the spinner/dropdown list
@@ -200,8 +192,7 @@ public class FragmentMapa extends FragmentActivity  implements OnMapReadyCallbac
             return;
         }
         mMap = map;
-        startDemo();
-            }
+    }
 
 
 
@@ -269,7 +260,6 @@ public class FragmentMapa extends FragmentActivity  implements OnMapReadyCallbac
 
     private class ChamadaWeb extends AsyncTask<String, Void, String> {
         private String enderecoWeb;
-        private String idUsuario;
 
         public ChamadaWeb(String endereco) {
             enderecoWeb = endereco;
@@ -296,6 +286,7 @@ public class FragmentMapa extends FragmentActivity  implements OnMapReadyCallbac
                     setUpMap();
                     variavelControleInternet = true;
                 Toast.makeText(FragmentMapa.this, "Usando banco de dados online!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(FragmentMapa.this, "Aguarde buscando sua localização...", Toast.LENGTH_LONG).show();
             }else{
                 InputStream inputStream = getResources().openRawResource(R.raw.police);
                 pontosFromWebService =new Scanner(inputStream).useDelimiter("\\A").next();
@@ -306,7 +297,7 @@ public class FragmentMapa extends FragmentActivity  implements OnMapReadyCallbac
         }
     }
 
-    /******************BUDEGA DA LOCALIZACAO ********************/
+    /******************BUDEGA (BUDGET) DA LOCALIZACAO ********************/
     @Override
     public void onDestroy() {
 
@@ -322,19 +313,20 @@ public class FragmentMapa extends FragmentActivity  implements OnMapReadyCallbac
             Log.d("ServiceForLatLng", "Network Update Released");
         }
         super.onDestroy();
+
     }
 
+
     //This is for Lat lng which is determine by your wireless or mobile network
+
     public class MyLocationListenerNetWork implements android.location.LocationListener
     {
         @Override
-        public void onLocationChanged(Location loc)
-        {
+        public void onLocationChanged(Location loc){
             double nlat = loc.getLatitude();
             double nlng = loc.getLongitude();
 
             //Setting the Network Lat, Lng into the textView
-            Toast.makeText(FragmentMapa.this, nlat+"|"+nlng, Toast.LENGTH_SHORT).show();
 
             Log.d("LAT & LNG Network:", nlat + " " + nlng);
         }
@@ -345,28 +337,28 @@ public class FragmentMapa extends FragmentActivity  implements OnMapReadyCallbac
             Log.d("LOG", "Network is OFF!");
         }
         @Override
-        public void onProviderEnabled(String provider)
-        {
+        public void onProviderEnabled(String provider){
             Log.d("LOG", "Thanks for enabling Network !");
         }
         @Override
-        public void onStatusChanged(String provider, int status, Bundle extras)
-        {
+        public void onStatusChanged(String provider, int status, Bundle extras){
         }
     }
 
-    public class MyLocationListenerGPS implements android.location.LocationListener
-    {
+    public class MyLocationListenerGPS implements android.location.LocationListener{
         @Override
-        public void onLocationChanged(Location loc)
-        {
-           double glat = loc.getLatitude();
-           double glng = loc.getLongitude();
+        public void onLocationChanged(Location loc){
+           glat = loc.getLatitude();
+           glng = loc.getLongitude();
 
             //Setting the GPS Lat, Lng into the textView
-            Toast.makeText(FragmentMapa.this, glat+" | "+glng, Toast.LENGTH_SHORT).show();
 
             Log.d("LAT & LNG GPS:", glat + " " + glng);
+
+            if(variavelControleGpsON){
+                startDemo();
+                variavelControleGpsON = false;
+            }
         }
 
         @Override
@@ -375,18 +367,16 @@ public class FragmentMapa extends FragmentActivity  implements OnMapReadyCallbac
             Log.d("LOG", "GPS is OFF!");
         }
         @Override
-        public void onProviderEnabled(String provider)
-        {
+        public void onProviderEnabled(String provider){
             Log.d("LOG", "Thanks for enabling GPS !");
         }
 
         @Override
-        public void onStatusChanged(String provider, int status, Bundle extras)
-        {
+        public void onStatusChanged(String provider, int status, Bundle extras){
         }
     }
 
-    public void showLoc(View v) {
+    public void showLoc() {
 
         //Location access ON or OFF checking
         ContentResolver contentResolver = getBaseContext().getContentResolver();

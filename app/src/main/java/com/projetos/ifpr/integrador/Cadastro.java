@@ -5,10 +5,13 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.github.pinball83.maskededittext.MaskedEditText;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,8 +33,6 @@ public class Cadastro extends AppCompatActivity {
     EditText nome, login, senha, er;
 
 
-    //comentario by jeremy22
-    //dlksajodijasdF
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +43,10 @@ public class Cadastro extends AppCompatActivity {
         login = (EditText)findViewById(R.id.login);
         senha = (EditText)findViewById(R.id.senha);
 
+        final MaskedEditText maskedEditText = (MaskedEditText) this.findViewById(R.id.masked_edit_text);
+
+        System.out.println(maskedEditText.getText());
+
 
         Button btnGravar = (Button)findViewById(R.id.salvar);
         btnGravar.setOnClickListener(new View.OnClickListener() {
@@ -50,7 +55,9 @@ public class Cadastro extends AppCompatActivity {
 
                System.out.println( nome.getText().toString()+ " | "+ login.getText().toString()+ " | "+ senha.getText().toString());
 
-                ChamadaWeb chamada = new ChamadaWeb("http://192.168.0.10:8090/IntegradorWS/rest/servicos/cadastro", nome.getText().toString(), login.getText().toString(), senha.getText().toString(),2);
+                ChamadaWeb chamada = new ChamadaWeb("http://"+
+                        ConfiguracaoServidor.retornarEnderecoServidor(Cadastro.this)
+                        +":8090/IntegradorWS/rest/servicos/cadastro", nome.getText().toString(), login.getText().toString(), senha.getText().toString(),2);
                 chamada.execute();
             }
         });

@@ -3,6 +3,7 @@ package com.projetos.ifpr.integrador;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -48,7 +49,9 @@ public class MainActivity extends AppCompatActivity {
         btnLogar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ChamadaWeb chamada = new ChamadaWeb("http://192.168.0.10:8090/IntegradorWS/rest/servicos/login",
+                    ChamadaWeb chamada = new ChamadaWeb("http://"+
+                            PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getString("ENDERECOSERVIDOR", "10.0.0.2")
+                            + ":8090/IntegradorWS/rest/servicos/login",
                             "", login.getText().toString(), senha.getText().toString(), 2);
                     chamada.execute();
                 }
@@ -139,6 +142,10 @@ public class MainActivity extends AppCompatActivity {
                 retornaMensagem(resultado);
             }
         }
+    }
+    public void abrirEndereco(View view){
+        Intent  i = new Intent(getApplicationContext(),ConfiguracaoServidor.class);
+        startActivity(i);
     }
 
 

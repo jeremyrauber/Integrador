@@ -10,20 +10,11 @@
 
     <ImageView
         android:id="@+id/imageView1"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_margin="5dp"
+        android:layout_weight="8000"
         android:src="@drawable/imagem2" />
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/TextoBoasVindas"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -35,24 +26,34 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:layout_margin="5dp"
+        android:inputType="text"
+        android:text="admin"
+        android:maxLines="1"
         android:id="@+id/login"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_margin="5dp"
         android:text="@string/senha" />
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:layout_margin="5dp"
         android:id="@+id/senha"
         android:inputType="textPassword"
+        android:text="admin"
         android:hint="@string/password_dica"/>
 
     <LinearLayout
         android:id="@+id/LinearLayout02"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:layout_width="fill_parent"
+        android:layout_margin="5dp"
         android:layout_alignParentBottom="true">
 
     <Button
@@ -72,5 +73,16 @@
         android:layout_weight="1"/>
 
     </LinearLayout>
+
+    <Button
+        android:contentDescription="Servidor"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/ic_settings_remote_black_24dp"
+        android:id="@+id/btnServidor"
+        android:layout_gravity="right"
+        android:onClick="abrirEndereco"
+        android:layout_weight="1"/>
 
 </LinearLayout>
