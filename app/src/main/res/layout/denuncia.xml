@@ -4,59 +4,94 @@
     android:layout_height="match_parent"
     android:layout_margin="10dp">
 
-    <Button
-        android:layout_width="125dp"
-        android:layout_height="125dp"
-        android:contentDescription="addDenuncia"
-        android:padding="10dp"
-        android:layout_gravity="center"
-        android:textAlignment="center"
-        android:background="@drawable/ic_add_a_photo_black_24dp"
-        android:backgroundTint="@android:color/holo_orange_light"
-        android:onClick="carregarFoto"
-        />
-    <TextView
-        android:layout_width="match_parent"
+    <ImageView android:id="@+id/fotoThumb"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:gravity="center"
-        android:text="Clique Adicionar foto"/>
+        android:layout_weight="0.5"
+        android:src="@drawable/ic_photo_camera_black_24dp"/>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btnAdicionar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/ic_add_a_photo_black_24dp"
+            android:backgroundTint="@android:color/holo_orange_light"
+            android:contentDescription="addDenuncia"
+            android:onClick="carregarFoto" />
+
+        <Button
+            android:id="@+id/btnExcluir"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="left"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/ic_close_black_24dp"
+            android:backgroundTint="@android:color/holo_red_dark"
+            android:contentDescription="addDenuncia"
+            android:onClick="excluirFoto"
+            android:visibility="invisible"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
+        android:id="@+id/textoInfo"
+        android:gravity="center"
+        android:text="Clique na câmera para adicionar foto"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
         android:gravity="left"
-        android:hint="Máximo de 250 caracteres"
-        android:text="Insira uma descrição"/>
+        android:text="Insira uma descrição:"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-
+        android:layout_marginLeft="10dp"
+        android:id="@+id/edtDescricao"
+        android:layout_marginRight="10dp"
+        android:hint="Máximo de 250 caracteres"
         android:maxLines="3"
+        android:maxLength="250"
         android:lines="3"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
         android:gravity="left"
-        android:text="Sua localização"/>
+        android:text="Sua localização:"/>
 
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_weight="1" />
 
     <Button
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="15dp"
         android:contentDescription="addDenuncia"
-        android:padding="10dp"
         android:layout_gravity="center"
         android:textAlignment="center"
         android:background="@drawable/ic_send_black_24dp"
@@ -66,7 +101,6 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
         android:gravity="center"
         android:text="Enviar"/>
 

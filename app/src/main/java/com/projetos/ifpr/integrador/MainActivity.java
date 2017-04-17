@@ -53,6 +53,9 @@ public class MainActivity extends AppCompatActivity {
                             PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getString("ENDERECOSERVIDOR", "10.0.0.2")
                             + ":8090/IntegradorWS/rest/servicos/login",
                             "", login.getText().toString(), senha.getText().toString(), 2);
+                    System.out.println("http://"+
+                            PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getString("ENDERECOSERVIDOR", "10.0.0.2")
+                            + ":8090/IntegradorWS/rest/servicos/login");
                     chamada.execute();
                 }
         });

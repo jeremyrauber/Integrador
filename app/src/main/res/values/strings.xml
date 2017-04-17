@@ -12,7 +12,6 @@
 
     <!-- googlemaps heatmap -->
     <string name="foco">Pontos com focos confirmados</string>
-    <string name="police_stations_url">http://data.gov.au/dataset/police-station-locations/resource/76110b24-0f0a-4c29-9583-3f99eaba486c</string>
     <string-array name="heatmaps_datasets_array">
         <item>@string/foco</item>
     </string-array>
