@@ -7,7 +7,7 @@
     <ImageView android:id="@+id/fotoThumb"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.5"
+        android:layout_weight="0.4"
         android:src="@drawable/ic_photo_camera_black_24dp"/>
 
     <RelativeLayout
@@ -67,8 +67,7 @@
         android:layout_marginRight="10dp"
         android:hint="Máximo de 250 caracteres"
         android:maxLines="3"
-        android:maxLength="250"
-        android:lines="3"/>
+        android:maxLength="250"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -88,20 +87,17 @@
         android:layout_weight="1" />
 
     <Button
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:contentDescription="addDenuncia"
         android:layout_gravity="center"
         android:textAlignment="center"
-        android:background="@drawable/ic_send_black_24dp"
-        android:backgroundTint="@android:color/holo_blue_dark"
+        android:text=" Enviar "
+        android:drawableRight="@drawable/ic_send_black_24dp"
+        android:backgroundTint="@android:color/holo_green_light"
         android:onClick="enviarDenuncia"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Enviar"/>
+
 
 </LinearLayout>

@@ -39,6 +39,7 @@ public class Denuncia extends FragmentActivity implements
     private ImageView imageView;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     Button btnExcluir;
+    Button btnAdicionar;
     TextView textInfo;
     EditText edtDescricao;
 
@@ -56,6 +57,7 @@ public class Denuncia extends FragmentActivity implements
         btnExcluir = (Button) findViewById(R.id.btnExcluir);
         textInfo = (TextView) findViewById(R.id.textoInfo);
         edtDescricao = (EditText) findViewById(R.id.edtDescricao);
+        btnAdicionar = (Button) findViewById(R.id.btnAdicionar);
 }
 
     @Override
@@ -142,6 +144,7 @@ public class Denuncia extends FragmentActivity implements
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             imageView.setImageBitmap(imageBitmap);
             btnExcluir.setVisibility(View.VISIBLE);
+            btnAdicionar.setVisibility(View.INVISIBLE);
             textInfo.setText("Clique no X para excluir a foto.");
         }
     }
@@ -151,6 +154,7 @@ public class Denuncia extends FragmentActivity implements
         Drawable drawable = res.getDrawable( R.drawable.ic_photo_camera_black_24dp );
         imageView.setImageDrawable(drawable);
         btnExcluir.setVisibility(View.INVISIBLE);
+        btnAdicionar.setVisibility(View.VISIBLE);
         textInfo.setText("Clique na câmera para adicionar foto.");
     }
 
@@ -163,7 +167,6 @@ public class Denuncia extends FragmentActivity implements
         Toast.makeText(this,
                 "Longitude: "+lng+" | Latitude: "+lat+
                 " Descricao: "+descricao
-
                 , Toast.LENGTH_LONG).show();
 
     }
