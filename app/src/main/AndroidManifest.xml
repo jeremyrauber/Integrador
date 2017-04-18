@@ -80,7 +80,7 @@
 
         <activity android:name=".ConfiguracaoServidor"/>
 
-        <activity android:name=".Denuncia"/>
+        <activity android:name=".CadastrarDenuncia"/>
     </application>
 
 </manifest>

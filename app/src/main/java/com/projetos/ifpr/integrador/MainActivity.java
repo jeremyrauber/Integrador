@@ -11,6 +11,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.projetos.ifpr.integrador.Model.Usuario;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;

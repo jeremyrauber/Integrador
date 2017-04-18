@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -22,13 +21,14 @@ import android.widget.Toast;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.projetos.ifpr.integrador.Model.Denuncia;
 
 
 /**
  * Created by Crash on 16/04/2017.
  */
 
-public class Denuncia extends FragmentActivity implements
+public class CadastrarDenuncia extends FragmentActivity implements
         GoogleMap.OnMyLocationButtonClickListener,
         OnMapReadyCallback,
         ActivityCompat.OnRequestPermissionsResultCallback {
@@ -160,15 +160,16 @@ public class Denuncia extends FragmentActivity implements
 
     public void enviarDenuncia(View view){
         GPSTracker gps = new GPSTracker(this);
-        Double lng = gps.getLongitude();
-        Double lat = gps.getLatitude();
-        String descricao = edtDescricao.getText().toString();
+
+        Denuncia d = new Denuncia();
+            d.setLatitude(gps.getLatitude());
+            d.setLongitude(gps.getLongitude());
+            d.setDescricao(edtDescricao.getText().toString());
 
         Toast.makeText(this,
-                "Longitude: "+lng+" | Latitude: "+lat+
-                " Descricao: "+descricao
+                "Longitude: "+d.getLongitude()+" | Latitude: "+d.getLatitude()+
+                " Descricao: "+d.getDescricao()
                 , Toast.LENGTH_LONG).show();
-
     }
 
 }

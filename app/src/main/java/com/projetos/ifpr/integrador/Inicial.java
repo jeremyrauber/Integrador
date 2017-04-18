@@ -134,7 +134,7 @@ public class Inicial extends AppCompatActivity
         }
     }
     public void abrirDenuncia(View view){
-        Intent  i = new Intent(getApplicationContext(),Denuncia.class);
+        Intent  i = new Intent(getApplicationContext(),CadastrarDenuncia.class);
         startActivity(i);
     }
     // FIM DA DOIDERA PARA FAZER LIGACAUM
