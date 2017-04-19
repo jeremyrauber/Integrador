@@ -15,19 +15,19 @@
 
 
     <!-- permissoes para webservice -->
-    <uses-permission android:name="android.permission.INTERNET"/>
+     <uses-permission android:name="android.permission.INTERNET"/>
 
     <!-- permissoes para ligacacoes -->
-    <uses-permission android:name="android.permission.CALL_PHONE" />
+        <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <!-- permissoes do MAPS-->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <permission
-        android:name="your.package.name.permission.MAPS_RECEIVE"
-        android:protectionLevel="signature" />
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+        <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+        <permission
+            android:name="your.package.name.permission.MAPS_RECEIVE"
+            android:protectionLevel="signature" />
+        <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
 
-        <!-- USO DA CAMERA-->
+    <!-- USO DA CAMERA-->
         <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
         <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
         <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -80,6 +80,18 @@
         <activity android:name=".Helper.ConfiguracaoServidor"/>
 
         <activity android:name=".CadastrarDenuncia"/>
+
+
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.projetos.ifpr.integrador"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"></meta-data>
+        </provider>
     </application>
 
 </manifest>

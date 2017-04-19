@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -15,6 +14,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
@@ -23,9 +23,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.projetos.ifpr.integrador.Helper.ConfiguracaoServidor;
 import com.projetos.ifpr.integrador.Helper.GPSTracker;
 import com.projetos.ifpr.integrador.Model.Denuncia;
@@ -43,7 +45,6 @@ import cz.msebera.android.httpclient.HttpResponse;
 import cz.msebera.android.httpclient.NameValuePair;
 import cz.msebera.android.httpclient.client.HttpClient;
 import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
-import cz.msebera.android.httpclient.client.methods.HttpGet;
 import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.impl.client.HttpClientBuilder;
 import cz.msebera.android.httpclient.message.BasicNameValuePair;
@@ -64,6 +65,7 @@ public class CadastrarDenuncia extends FragmentActivity implements
     private boolean mPermissionDenied = false;
     private ImageView imageView;
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int REQUEST_TAKE_PHOTO = 1;
     private Button btnExcluir;
     private Button btnAdicionar;
     private TextView textInfo;
@@ -71,11 +73,14 @@ public class CadastrarDenuncia extends FragmentActivity implements
     private String img_str;
     private Denuncia d;
     private byte[] image;
-    private String mCurrentPhotoPath;
+    String mCurrentPhotoPath;
+
+//http://stackoverflow.com/questions/42330052/the-photo-lose-its-quality-when-it-appears-into-the-imageview
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.denuncia);
 
@@ -93,10 +98,13 @@ public class CadastrarDenuncia extends FragmentActivity implements
     @Override
     public void onMapReady(GoogleMap map) {
         mMap = map;
+        GPSTracker gps = new GPSTracker(this);
 
+        LatLng FozdoIguacu = new LatLng(gps.getLatitude(),gps.getLongitude());
         mMap.setOnMyLocationButtonClickListener(this);
         enableMyLocation();
         mMap.getMaxZoomLevel();
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(FozdoIguacu,14));
     }
 
     /**
@@ -117,7 +125,7 @@ public class CadastrarDenuncia extends FragmentActivity implements
     @Override
     public boolean onMyLocationButtonClick() {
 
-        Toast.makeText(this, "MyLocation button clicked", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Verifique sua localização!", Toast.LENGTH_SHORT).show();
 
         return false;
     }
@@ -160,17 +168,57 @@ public class CadastrarDenuncia extends FragmentActivity implements
 
     /*********** CODIGO DO ACESSO A CAMERA AND STUFS ***********/
 
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
     public void carregarFoto(View view) {
+
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.projetos.ifpr.integrador",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+            }
+        }
+
+
+       /* Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
+        */
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             imageView.setImageBitmap(imageBitmap);
