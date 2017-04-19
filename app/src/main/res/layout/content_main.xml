@@ -86,6 +86,7 @@
         android:background="@drawable/ic_add_black_24dp"
         android:backgroundTint="@android:color/black"
         android:onClick="abrirDenuncia"
+        android:id="@+id/btnAdd"
         />
 
 

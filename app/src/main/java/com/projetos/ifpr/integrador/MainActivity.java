@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.projetos.ifpr.integrador.Helper.ConfiguracaoServidor;
 import com.projetos.ifpr.integrador.Model.Usuario;
 
 import java.io.IOException;

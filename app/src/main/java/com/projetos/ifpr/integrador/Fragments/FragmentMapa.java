@@ -29,9 +29,8 @@ import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.maps.android.heatmaps.Gradient;
 import com.google.maps.android.heatmaps.HeatmapTileProvider;
-import com.projetos.ifpr.integrador.ConfiguracaoServidor;
+import com.projetos.ifpr.integrador.Helper.ConfiguracaoServidor;
 import com.projetos.ifpr.integrador.Inicial;
-import com.projetos.ifpr.integrador.MainActivity;
 import com.projetos.ifpr.integrador.R;
 
 import org.json.JSONArray;
@@ -227,7 +226,7 @@ public class FragmentMapa extends FragmentActivity  implements OnMapReadyCallbac
         ArrayList<LatLng> list = new ArrayList<LatLng>();
         //InputStream inputStream = getResources().openRawResource(R.raw.police);
 
-       // String json = new Scanner(inputStream).useDelimiter("\\A").next();
+        // String json = new Scanner(inputStream).useDelimiter("\\A").next();
 
         JSONArray array = new JSONArray(pontosFromWebService);
 
@@ -282,9 +281,9 @@ public class FragmentMapa extends FragmentActivity  implements OnMapReadyCallbac
         public void onPostExecute(String resultado) {
             if (resultado != null) {
                 pontosFromWebService = resultado;
-                    System.out.println(resultado);
-                    setUpMap();
-                    variavelControleInternet = true;
+                System.out.println(resultado);
+                setUpMap();
+                variavelControleInternet = true;
                 Toast.makeText(FragmentMapa.this, "Usando banco de dados online!", Toast.LENGTH_SHORT).show();
                 Toast.makeText(FragmentMapa.this, "Aguarde buscando sua localização...", Toast.LENGTH_LONG).show();
             }else{
@@ -348,8 +347,8 @@ public class FragmentMapa extends FragmentActivity  implements OnMapReadyCallbac
     public class MyLocationListenerGPS implements android.location.LocationListener{
         @Override
         public void onLocationChanged(Location loc){
-           glat = loc.getLatitude();
-           glng = loc.getLongitude();
+            glat = loc.getLatitude();
+            glng = loc.getLongitude();
 
             //Setting the GPS Lat, Lng into the textView
 

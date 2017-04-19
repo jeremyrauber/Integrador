@@ -78,7 +78,7 @@
 
         <activity android:name=".Fragments.FragmentPreferencias"/>
 
-        <activity android:name=".ConfiguracaoServidor"/>
+        <activity android:name=".Helper.ConfiguracaoServidor"/>
 
         <activity android:name=".CadastrarDenuncia"/>
     </application>

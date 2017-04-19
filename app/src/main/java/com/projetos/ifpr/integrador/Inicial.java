@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.projetos.ifpr.integrador.Fragments.FragmentBuscar;
@@ -30,6 +31,7 @@ public class Inicial extends AppCompatActivity
 
     private static final int PERMISSIONS_REQUEST_PHONE_CALL = 100;
     private static String[] PERMISSIONS_PHONECALL = {Manifest.permission.CALL_PHONE};
+    private Button btnAdd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,8 @@ public class Inicial extends AppCompatActivity
         setContentView(R.layout.inicial);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        btnAdd = (Button) findViewById(R.id.btnAdd);
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -1,4 +1,4 @@
-package com.projetos.ifpr.integrador;
+package com.projetos.ifpr.integrador.Helper;
 
 import android.app.AlertDialog;
 import android.app.Service;

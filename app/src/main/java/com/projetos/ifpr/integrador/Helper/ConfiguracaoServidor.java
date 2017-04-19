@@ -1,4 +1,4 @@
-package com.projetos.ifpr.integrador;
+package com.projetos.ifpr.integrador.Helper;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.projetos.ifpr.integrador.R;
 
 /**
  * Created by Crash on 15/04/2017.
@@ -51,7 +53,6 @@ public class ConfiguracaoServidor extends Activity {
 
     public static String retornarEnderecoServidor(Context context){
         return PreferenceManager.getDefaultSharedPreferences(context).getString("ENDERECOSERVIDOR", "10.0.0.2");
-
     }
 
 }
