@@ -88,7 +88,7 @@ public class CadastrarDenuncia extends FragmentActivity implements
         textInfo = (TextView) findViewById(R.id.textoInfo);
         edtDescricao = (EditText) findViewById(R.id.edtDescricao);
         btnAdicionar = (Button) findViewById(R.id.btnAdicionar);
-}
+    }
 
     @Override
     public void onMapReady(GoogleMap map) {
@@ -174,14 +174,12 @@ public class CadastrarDenuncia extends FragmentActivity implements
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             imageView.setImageBitmap(imageBitmap);
-            setPic();
 
             // transforma foto em string
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             //imageBitmap.compress(Bitmap.CompressFormat.PNG,100, stream);
             image = stream.toByteArray();
             img_str = Base64.encodeToString(image, Base64.DEFAULT);
-
 
 
             btnExcluir.setVisibility(View.VISIBLE);
@@ -192,14 +190,14 @@ public class CadastrarDenuncia extends FragmentActivity implements
 
     public void excluirFoto(View view) {
         Resources res = getResources();
-        Drawable drawable = res.getDrawable( R.drawable.ic_photo_camera_black_24dp );
+        Drawable drawable = res.getDrawable(R.drawable.ic_photo_camera_black_24dp);
         imageView.setImageDrawable(drawable);
         btnExcluir.setVisibility(View.INVISIBLE);
         btnAdicionar.setVisibility(View.VISIBLE);
         textInfo.setText("Clique na câmera para adicionar foto.");
     }
 
-    public void enviarDenuncia(View view){
+    public void enviarDenuncia(View view) {
 
         GPSTracker gps = new GPSTracker(this);
         d = new Denuncia();
@@ -210,24 +208,24 @@ public class CadastrarDenuncia extends FragmentActivity implements
         d.setFotobyte(image);
 
 
-        if((d.getFoto() != null && d.getFoto()!= "")
-                && (d.getDescricao() != null && d.getDescricao()!= "")
-                && (d.getLatitude() != null && d.getLongitude() != null ) ){
+        if ((d.getFoto() != null && d.getFoto() != "")
+                && (d.getDescricao() != null && d.getDescricao() != "")
+                && (d.getLatitude() != null && d.getLongitude() != null)) {
 
-            ChamadaWeb chamada = new ChamadaWeb("http://"+
+            ChamadaWeb chamada = new ChamadaWeb("http://" +
                     ConfiguracaoServidor.retornarEnderecoServidor(CadastrarDenuncia.this)
-                    +":8090/IntegradorWS/rest/servicos/enviararquivo2");
+                    + ":8090/IntegradorWS/rest/servicos/enviararquivo2");
             chamada.execute();
         }
         String msg = "";
-        if(d.getFoto() == null || d.getFoto().equals("")){
+        if (d.getFoto() == null || d.getFoto().equals("")) {
             msg += " Adicione uma foto a denúncia! ";
         }
-        if(d.getDescricao() == null || d.getDescricao().equals("")){
-            msg +=" Adicione uma descrição a denúncia! ";
+        if (d.getDescricao() == null || d.getDescricao().equals("")) {
+            msg += " Adicione uma descrição a denúncia! ";
         }
 
-        if(!msg.equals("")) {
+        if (!msg.equals("")) {
             Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
         }
 
@@ -239,7 +237,7 @@ public class CadastrarDenuncia extends FragmentActivity implements
         private String enderecoWeb;
 
 
-        public  ChamadaWeb(String endereco){
+        public ChamadaWeb(String endereco) {
             this.enderecoWeb = endereco;
         }
 
@@ -248,18 +246,18 @@ public class CadastrarDenuncia extends FragmentActivity implements
             HttpClient cliente = HttpClientBuilder.create().build();
 
             try {
-                    HttpPost chamada = new HttpPost(enderecoWeb);
-                    List<NameValuePair> parametros = new ArrayList<NameValuePair>(5); //numeor de params
-                    parametros.add(new BasicNameValuePair("latitude", d.getLatitude().toString() ));
-                    parametros.add(new BasicNameValuePair("longitude", d.getLongitude().toString() ));
-                    parametros.add(new BasicNameValuePair("descricao", d.getDescricao() ));
-                    parametros.add(new BasicNameValuePair("imgb64", d.getFoto() ));
+                HttpPost chamada = new HttpPost(enderecoWeb);
+                List<NameValuePair> parametros = new ArrayList<NameValuePair>(5); //numeor de params
+                parametros.add(new BasicNameValuePair("latitude", d.getLatitude().toString()));
+                parametros.add(new BasicNameValuePair("longitude", d.getLongitude().toString()));
+                parametros.add(new BasicNameValuePair("descricao", d.getDescricao()));
+                parametros.add(new BasicNameValuePair("imgb64", d.getFoto()));
 
-                    chamada.setEntity(new UrlEncodedFormEntity(parametros));
-                    HttpResponse resposta = cliente.execute(chamada);
+                chamada.setEntity(new UrlEncodedFormEntity(parametros));
+                HttpResponse resposta = cliente.execute(chamada);
 
-                    String responseBody = EntityUtils.toString(resposta.getEntity());
-                    return responseBody;
+                String responseBody = EntityUtils.toString(resposta.getEntity());
+                return responseBody;
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -267,59 +265,16 @@ public class CadastrarDenuncia extends FragmentActivity implements
             return null;
         }
 
-        public void onPostExecute(String resultado)
-        {
-            if(resultado != null){
+        public void onPostExecute(String resultado) {
+            if (resultado != null) {
                 System.out.println(resultado);
 
-                    Intent intent = getIntent();
-                    finish();
-                    startActivity(intent);
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
                 Toast.makeText(CadastrarDenuncia.this, resultado, Toast.LENGTH_SHORT).show();
             }
         }
-    }
-
-
-
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
-        return image;
-    }
-
-    private void setPic() {
-        // Get the dimensions of the View
-        int targetW = imageView.getWidth();
-        int targetH = imageView.getHeight();
-
-        // Get the dimensions of the bitmap
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-
-        // Determine how much to scale down the image
-        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
-
-        // Decode the image file into a Bitmap sized to fill the View
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inPurgeable = true;
-
-        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        imageView.setImageBitmap(bitmap);
     }
 
 }
