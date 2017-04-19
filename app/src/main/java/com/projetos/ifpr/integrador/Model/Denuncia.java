@@ -12,7 +12,8 @@ public class Denuncia {
     private String descricao;
     private Double latitude;
     private Double longitude;
-    private Byte[] foto;
+    private String foto;
+    private byte[] fotobyte;
     private Date data;
 
     public Integer getId() {
@@ -47,11 +48,11 @@ public class Denuncia {
         this.longitude = longitude;
     }
 
-    public Byte[] getFoto() {
+    public String getFoto() {
         return foto;
     }
 
-    public void setFoto(Byte[] foto) {
+    public void setFoto(String foto) {
         this.foto = foto;
     }
 
@@ -61,5 +62,13 @@ public class Denuncia {
 
     public void setData(Date data) {
         this.data = data;
+    }
+
+    public byte[] getFotobyte() {
+        return fotobyte;
+    }
+
+    public void setFotobyte(byte[] fotobyte) {
+        this.fotobyte = fotobyte;
     }
 }

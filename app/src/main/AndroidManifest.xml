@@ -16,20 +16,19 @@
 
     <!-- permissoes para webservice -->
     <uses-permission android:name="android.permission.INTERNET"/>
+
     <!-- permissoes para ligacacoes -->
     <uses-permission android:name="android.permission.CALL_PHONE" />
-
 
     <!-- permissoes do MAPS-->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <permission
         android:name="your.package.name.permission.MAPS_RECEIVE"
         android:protectionLevel="signature" />
-    <uses-permission android:name="your.package.name.permission.MAPS_RECEIVE"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
 
         <!-- USO DA CAMERA-->
+        <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
         <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
         <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
         <uses-feature android:name="android.hardware.camera"
