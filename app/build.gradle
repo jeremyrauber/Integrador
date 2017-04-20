@@ -28,7 +28,7 @@ dependencies {
     compile 'com.google.maps.android:android-maps-utils:0.4+' // servicos do maps e seus utilitario
     compile 'com.google.android.gms:play-services:10.2.1'    // servicos do google que ajudam
     compile 'com.github.pinball83:masked-edittext:1.0.3'    //mascara de número do tel
-    compile 'net.gotev:uploadservice:2.1'                  // upload multpartfile
+  //  compile 'net.gotev:uploadservice:2.1'                  // upload multpartfile
 
 
 

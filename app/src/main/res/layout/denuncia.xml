@@ -5,9 +5,10 @@
     android:layout_margin="10dp">
 
     <ImageView android:id="@+id/fotoThumb"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.8"
+        android:layout_width="240dp"
+        android:layout_height="120dp"
+        android:layout_gravity="center"
+        android:layout_weight="0.5"
         android:src="@drawable/ic_photo_camera_black_24dp"/>
 
     <RelativeLayout

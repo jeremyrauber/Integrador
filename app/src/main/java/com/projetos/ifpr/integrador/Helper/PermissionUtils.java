@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.projetos.ifpr.integrador;
+package com.projetos.ifpr.integrador.Helper;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -25,6 +25,9 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.widget.Toast;
+
+import com.projetos.ifpr.integrador.CadastrarDenuncia;
+import com.projetos.ifpr.integrador.R;
 
 /**
  * Utility class for access to runtime permissions.

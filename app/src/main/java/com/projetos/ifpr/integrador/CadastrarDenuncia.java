@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -30,6 +32,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.projetos.ifpr.integrador.Helper.ConfiguracaoServidor;
 import com.projetos.ifpr.integrador.Helper.GPSTracker;
+import com.projetos.ifpr.integrador.Helper.PermissionUtils;
 import com.projetos.ifpr.integrador.Model.Denuncia;
 
 
@@ -65,7 +68,6 @@ public class CadastrarDenuncia extends FragmentActivity implements
     private boolean mPermissionDenied = false;
     private ImageView imageView;
     static final int REQUEST_IMAGE_CAPTURE = 1;
-    static final int REQUEST_TAKE_PHOTO = 1;
     private Button btnExcluir;
     private Button btnAdicionar;
     private TextView textInfo;
@@ -73,7 +75,7 @@ public class CadastrarDenuncia extends FragmentActivity implements
     private String img_str;
     private Denuncia d;
     private byte[] image;
-    String mCurrentPhotoPath;
+    private Bitmap fotoquevaiproupload;
 
 //http://stackoverflow.com/questions/42330052/the-photo-lose-its-quality-when-it-appears-into-the-imageview
 
@@ -168,6 +170,8 @@ public class CadastrarDenuncia extends FragmentActivity implements
 
     /*********** CODIGO DO ACESSO A CAMERA AND STUFS ***********/
 
+    String mCurrentPhotoPath;
+
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -183,7 +187,7 @@ public class CadastrarDenuncia extends FragmentActivity implements
         mCurrentPhotoPath = image.getAbsolutePath();
         return image;
     }
-
+    static final int REQUEST_TAKE_PHOTO = 1;
     public void carregarFoto(View view) {
 
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -194,8 +198,7 @@ public class CadastrarDenuncia extends FragmentActivity implements
             try {
                 photoFile = createImageFile();
             } catch (IOException ex) {
-                // Error occurred while creating the File
-
+                // Error occurred while creating the Fil
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
@@ -207,34 +210,48 @@ public class CadastrarDenuncia extends FragmentActivity implements
             }
         }
 
-
-       /* Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        }
-        */
     }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            imageView.setImageBitmap(imageBitmap);
-
-            // transforma foto em string
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            //imageBitmap.compress(Bitmap.CompressFormat.PNG,100, stream);
-            image = stream.toByteArray();
-            img_str = Base64.encodeToString(image, Base64.DEFAULT);
+            setPic();
 
 
             btnExcluir.setVisibility(View.VISIBLE);
             btnAdicionar.setVisibility(View.INVISIBLE);
             textInfo.setText("Clique no X para excluir a foto.");
+
         }
+
+    private void setPic() {
+        // Get the dimensions of the View
+        int targetW = imageView.getWidth();
+        int targetH = imageView.getHeight();
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        fotoquevaiproupload = bitmap;
+        imageView.setImageBitmap(bitmap);
     }
+
+
 
     public void excluirFoto(View view) {
         Resources res = getResources();
@@ -249,11 +266,18 @@ public class CadastrarDenuncia extends FragmentActivity implements
 
         GPSTracker gps = new GPSTracker(this);
         d = new Denuncia();
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        fotoquevaiproupload.compress(Bitmap.CompressFormat.PNG, 75, stream);
+        image = stream.toByteArray();
+        img_str = Base64.encodeToString(image, Base64.DEFAULT);
+
+        System.out.println(img_str.length()+">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
         d.setFoto(img_str);
         d.setLongitude(gps.getLongitude());
         d.setLatitude(gps.getLatitude());
         d.setDescricao(edtDescricao.getText().toString());
-        d.setFotobyte(image);
 
 
         if ((d.getFoto() != null && d.getFoto() != "")
@@ -295,7 +319,7 @@ public class CadastrarDenuncia extends FragmentActivity implements
 
             try {
                 HttpPost chamada = new HttpPost(enderecoWeb);
-                List<NameValuePair> parametros = new ArrayList<NameValuePair>(5); //numeor de params
+                List<NameValuePair> parametros = new ArrayList<NameValuePair>(4); //numeor de params
                 parametros.add(new BasicNameValuePair("latitude", d.getLatitude().toString()));
                 parametros.add(new BasicNameValuePair("longitude", d.getLongitude().toString()));
                 parametros.add(new BasicNameValuePair("descricao", d.getDescricao()));
