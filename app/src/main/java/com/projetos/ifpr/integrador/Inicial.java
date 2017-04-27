@@ -55,13 +55,12 @@ public class Inicial extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-        drawer.closeDrawer(GravityCompat.START);
-    } else {
-        super.onBackPressed();
+        Intent startMain = new Intent(Intent.ACTION_MAIN);
+        startMain.addCategory(Intent.CATEGORY_HOME);
+        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(startMain);
+
     }
-}
 
     // ACOES NO MENUBAR LATERAL
     @SuppressWarnings("StatementWithEmptyBody")
@@ -73,9 +72,13 @@ public class Inicial extends AppCompatActivity
         Class fragmentClass = null;
 
         if (id == R.id.nav_buscar) {
-            fragmentClass = FragmentBuscar.class;
+            Intent intent = new Intent(this, FragmentBuscar.class);
+            finish();
+            startActivity(intent);
         } else if (id == R.id.nav_editar) {
-            fragmentClass = FragmentEditar.class;
+            Intent intent = new Intent(this, Editar.class);
+            finish();
+            startActivity(intent);
         } else if (id == R.id.nav_preferencias) {
             Intent intent = new Intent(this, FragmentPreferencias.class);
             finish();
@@ -118,7 +121,7 @@ public class Inicial extends AppCompatActivity
             requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, PERMISSIONS_REQUEST_PHONE_CALL);
         } else {
             //Open call function
-            String number = "91324567";
+            String number = "35248848";
             Intent intent = new Intent(Intent.ACTION_CALL);
             intent.setData(Uri.parse("tel:" + number));
             startActivity(intent);
@@ -137,9 +140,9 @@ public class Inicial extends AppCompatActivity
             }
         }
     }
+
     public void abrirDenuncia(View view){
         Intent  i = new Intent(getApplicationContext(),CadastrarDenuncia.class);
         startActivity(i);
     }
-    // FIM DA DOIDERA PARA FAZER LIGACAUM
 }

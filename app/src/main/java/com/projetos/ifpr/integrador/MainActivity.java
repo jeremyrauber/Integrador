@@ -1,6 +1,8 @@
 package com.projetos.ifpr.integrador;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -13,6 +15,9 @@ import android.widget.Toast;
 
 import com.projetos.ifpr.integrador.Helper.ConfiguracaoServidor;
 import com.projetos.ifpr.integrador.Model.Usuario;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -74,23 +79,23 @@ public class MainActivity extends AppCompatActivity {
     }
 //teste
     public void retornaMensagem(String resultado){
+        try {
+            JSONObject rsp = new JSONObject(resultado);
 
-        System.out.println(resultado);
-        if(resultado.contains("logado")){
-
-            String array[] = new String[2];
-            array = resultado.split(";");
-            String IDusuario = array[1];
-
-            Toast.makeText(this.getBaseContext(), "Usuario Logado! id:"+array[1], Toast.LENGTH_SHORT).show();
-
-            Intent  i = new Intent(getApplicationContext(),Inicial.class);
-            i.putExtra(EXTRA_MESSAGE, IDusuario);
-            startActivity(i);
-
-        }
-        else{
-            Toast.makeText(this.getBaseContext(), "Usuário ou senha não conferem! Tente Novamente", Toast.LENGTH_SHORT).show();
+            if(rsp.getBoolean("resposta")){
+                Intent  i = new Intent(getApplicationContext(),Inicial.class);
+                i.putExtra(EXTRA_MESSAGE, rsp.getString("idUsuario"));
+                SharedPreferences pref = getApplicationContext().getSharedPreferences("idUsuario", 0); // 0 - for private mode
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putInt("idUsuario", Integer.parseInt(rsp.getString("idUsuario")));
+                editor.commit();
+                startActivity(i);
+            }
+            else{
+                Toast.makeText(this.getBaseContext(), "Usuário ou senha não conferem! Tente Novamente.", Toast.LENGTH_SHORT).show();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
@@ -152,6 +157,15 @@ public class MainActivity extends AppCompatActivity {
     public void abrirEndereco(View view){
         Intent  i = new Intent(getApplicationContext(),ConfiguracaoServidor.class);
         startActivity(i);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent startMain = new Intent(Intent.ACTION_MAIN);
+        startMain.addCategory(Intent.CATEGORY_HOME);
+        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(startMain);
+
     }
 
 

@@ -1,12 +1,14 @@
 package com.projetos.ifpr.integrador;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -35,6 +37,9 @@ import com.projetos.ifpr.integrador.Helper.GPSTracker;
 import com.projetos.ifpr.integrador.Helper.PermissionUtils;
 import com.projetos.ifpr.integrador.Model.Denuncia;
 
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -67,7 +72,6 @@ public class CadastrarDenuncia extends FragmentActivity implements
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private boolean mPermissionDenied = false;
     private ImageView imageView;
-    static final int REQUEST_IMAGE_CAPTURE = 1;
     private Button btnExcluir;
     private Button btnAdicionar;
     private TextView textInfo;
@@ -263,6 +267,8 @@ public class CadastrarDenuncia extends FragmentActivity implements
     }
 
     public void enviarDenuncia(View view) {
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("idUsuario", 0);
+        int idUsuario=pref.getInt("idUsuario", 0);
 
         GPSTracker gps = new GPSTracker(this);
         d = new Denuncia();
@@ -278,6 +284,7 @@ public class CadastrarDenuncia extends FragmentActivity implements
         d.setLongitude(gps.getLongitude());
         d.setLatitude(gps.getLatitude());
         d.setDescricao(edtDescricao.getText().toString());
+        d.setIdUsuario(idUsuario);
 
 
         if ((d.getFoto() != null && d.getFoto() != "")
@@ -286,7 +293,7 @@ public class CadastrarDenuncia extends FragmentActivity implements
 
             ChamadaWeb chamada = new ChamadaWeb("http://" +
                     ConfiguracaoServidor.retornarEnderecoServidor(CadastrarDenuncia.this)
-                    + ":8090/IntegradorWS/rest/servicos/enviararquivo2");
+                    + ":8090/IntegradorWS/rest/servicos/uploadDenuncia");
             chamada.execute();
         }
         String msg = "";
@@ -301,6 +308,26 @@ public class CadastrarDenuncia extends FragmentActivity implements
             Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    public void atualizaMensagem(String resultado)
+    {
+        JSONObject rsp = null;
+        try {
+            rsp = new JSONObject(resultado);
+            System.out.print(rsp.toString());
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
+
+            if(rsp.getBoolean("resposta")){
+                Toast.makeText(CadastrarDenuncia.this, "Upload efetuado com sucesso!", Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(CadastrarDenuncia.this, "Erro ao efetuar a denúncia!", Toast.LENGTH_SHORT).show();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -324,6 +351,8 @@ public class CadastrarDenuncia extends FragmentActivity implements
                 parametros.add(new BasicNameValuePair("longitude", d.getLongitude().toString()));
                 parametros.add(new BasicNameValuePair("descricao", d.getDescricao()));
                 parametros.add(new BasicNameValuePair("imgb64", d.getFoto()));
+                parametros.add(new BasicNameValuePair("idUsuario", d.getIdUsuario().toString()));
+
 
                 chamada.setEntity(new UrlEncodedFormEntity(parametros));
                 HttpResponse resposta = cliente.execute(chamada);
@@ -337,16 +366,12 @@ public class CadastrarDenuncia extends FragmentActivity implements
             return null;
         }
 
-        public void onPostExecute(String resultado) {
-            if (resultado != null) {
+        public void onPostExecute(String resultado)
+        {
+            if(resultado != null){
                 System.out.println(resultado);
-
-                Intent intent = getIntent();
-                finish();
-                startActivity(intent);
-                Toast.makeText(CadastrarDenuncia.this, resultado, Toast.LENGTH_SHORT).show();
+                atualizaMensagem(resultado);
             }
         }
     }
-
 }

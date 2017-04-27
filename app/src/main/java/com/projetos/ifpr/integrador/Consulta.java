@@ -34,7 +34,7 @@ public class Consulta extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.consulta);
-        textoRetorno = (TextView) findViewById(R.id.textoConsulta);
+        //textoRetorno = (TextView) findViewById(R.id.textoConsulta);
 
         Intent intent = getIntent();
         String idUsuario = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
@@ -44,14 +44,14 @@ public class Consulta extends AppCompatActivity {
                 +":8090/IntegradorWS/rest/servicos/consulta",idUsuario);
         chamada.execute();
 
-        Button btnInicial = (Button) findViewById(R.id.btnInicial);
-        btnInicial.setOnClickListener(new View.OnClickListener(){
+        //Button btnInicial = (Button) findViewById(R.id.btnInicial);
+       /* btnInicial.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v)
             {
                 Intent  i = new Intent(getApplicationContext(),Inicial.class);
                 startActivity(i);
             }
-        });
+        });*/
 
     }
 

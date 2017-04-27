@@ -5,17 +5,16 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
-
+    <!-- permissoes para webservice -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.NoActionBar">
+        android:theme="@style/AppTheme.NoActionBar"
+        >
 
-
-    <!-- permissoes para webservice -->
-     <uses-permission android:name="android.permission.INTERNET"/>
 
     <!-- permissoes para ligacacoes -->
         <uses-permission android:name="android.permission.CALL_PHONE" />
@@ -44,7 +43,8 @@
 
 
         <activity android:name="com.projetos.ifpr.integrador.MainActivity"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -56,30 +56,48 @@
         <activity android:name="com.projetos.ifpr.integrador.Cadastro"
             android:label="Cadastro "
             android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"
             ></activity>
 
         <!-- Declaracao da Activity Inicial-->
         <activity android:name="com.projetos.ifpr.integrador.Inicial"
             android:label="Inicial "
-            ></activity>
+            android:screenOrientation="portrait"></activity>
 
         <!-- Declaracao da Activity da tela de cadastro -->
         <activity
             android:name="com.projetos.ifpr.integrador.Consulta"
             android:label="Consulta "
-            android:parentActivityName="com.projetos.ifpr.integrador.MainActivity">
+            android:parentActivityName="com.projetos.ifpr.integrador.MainActivity"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.projetos.ifpr.integrador.MainActivity" />
         </activity>
 
-        <activity android:name=".Fragments.FragmentMapa"/>
+        <activity android:name=".Fragments.FragmentMapa"
+            android:screenOrientation="portrait"/>
 
-        <activity android:name=".Fragments.FragmentPreferencias"/>
+        <activity android:name=".Fragments.FragmentPreferencias"
+            android:screenOrientation="portrait"/>
 
-        <activity android:name=".Helper.ConfiguracaoServidor"/>
+        <activity android:name=".Fragments.FragmentEditar"
+            android:screenOrientation="portrait"/>
 
-        <activity android:name=".CadastrarDenuncia"/>
+        <activity android:name=".Editar"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".VisualizaDenuncia"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".Fragments.FragmentBuscar"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".Helper.ConfiguracaoServidor"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".CadastrarDenuncia"
+            android:screenOrientation="portrait"/>
 
 
 

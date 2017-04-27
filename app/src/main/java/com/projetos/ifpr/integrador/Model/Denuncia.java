@@ -9,6 +9,7 @@ import java.util.Date;
 public class Denuncia {
 
     private Integer Id;
+    private Integer IdUsuario;
     private String descricao;
     private Double latitude;
     private Double longitude;
@@ -70,5 +71,13 @@ public class Denuncia {
 
     public void setFotobyte(byte[] fotobyte) {
         this.fotobyte = fotobyte;
+    }
+
+    public Integer getIdUsuario() {
+        return IdUsuario;
+    }
+
+    public void setIdUsuario(Integer idUsuario) {
+        IdUsuario = idUsuario;
     }
 }
