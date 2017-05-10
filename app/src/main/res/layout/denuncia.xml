@@ -2,14 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="10dp">
+    android:layout_margin="10dp"
+    android:screenOrientation="portrait">
 
-    <ImageView android:id="@+id/fotoThumb"
-        android:layout_width="200dp"
-        android:layout_height="100dp"
+    <ImageView
+        android:id="@+id/fotoThumb"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_gravity="center"
-        android:layout_weight="0.5"
-        android:src="@drawable/ic_photo_camera_black_24dp"/>
+        android:layout_margin="10dp"
+        android:layout_weight="0.6"
+        android:src="@drawable/ic_photo_camera_black_24dp" />
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -19,9 +22,8 @@
             android:id="@+id/btnAdicionar"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="20dp"
-            android:layout_weight="0.05"
+            android:layout_gravity="right"
+            android:layout_marginLeft="40dp"
             android:background="@drawable/ic_add_a_photo_black_24dp"
             android:backgroundTint="@android:color/holo_orange_light"
             android:contentDescription="addDenuncia"
@@ -31,9 +33,9 @@
             android:id="@+id/btnExcluir"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_weight="0.05"
-            android:layout_gravity="left"
-            android:layout_marginRight="20dp"
+            android:layout_weight="1"
+            android:layout_gravity="right"
+            android:layout_marginRight="40dp"
             android:background="@drawable/ic_close_black_24dp"
             android:backgroundTint="@android:color/holo_red_dark"
             android:contentDescription="addDenuncia"
@@ -46,21 +48,24 @@
 
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
         android:id="@+id/textoInfo"
-        android:gravity="center"
-        android:layout_weight="0.05"
-        android:text="Clique na câmera para adicionar foto"/>
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="10dp"
+        android:layout_weight="0.1"
+        android:gravity="left"
+        android:text="Clique na câmera amarela para adicionar foto"
+        android:textSize="16dp"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="0dp"
+        android:layout_margin="10dp"
+        android:layout_weight="0.1"
         android:gravity="left"
-        android:layout_weight="0.05"
+        android:textSize="16dp"
+        android:textStyle="bold"
         android:text="Sua localização:"/>
 
     <fragment
@@ -74,34 +79,35 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.1"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
         android:gravity="left"
-        android:layout_weight="0.05"
+        android:textSize="16dp"
+        android:textStyle="bold"
         android:text="Insira uma descrição:"/>
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginLeft="10dp"
         android:id="@+id/edtDescricao"
         android:layout_marginRight="10dp"
-        android:layout_weight="0.05"
+        android:layout_weight="0.3"
         android:hint="Máximo de 250 caracteres"
         android:maxLines="3"
         android:maxLength="250"/>
 
     <Button
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
         android:contentDescription="addDenuncia"
         android:layout_gravity="center"
         android:textAlignment="center"
-        android:text=" Enviar "
-        android:layout_weight="0.01"
+        android:text="Enviar "
+        android:layout_weight="0.25"
         android:drawableRight="@drawable/ic_send_black_24dp"
         android:backgroundTint="@android:color/holo_green_light"
         android:onClick="enviarDenuncia"/>

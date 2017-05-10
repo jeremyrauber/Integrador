@@ -1,5 +1,6 @@
 package com.projetos.ifpr.integrador;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -80,6 +81,7 @@ public class CadastrarDenuncia extends FragmentActivity implements
     private Denuncia d;
     private byte[] image;
     private Bitmap fotoquevaiproupload;
+    private ProgressDialog progress;
 
 //http://stackoverflow.com/questions/42330052/the-photo-lose-its-quality-when-it-appears-into-the-imageview
 
@@ -267,6 +269,8 @@ public class CadastrarDenuncia extends FragmentActivity implements
     }
 
     public void enviarDenuncia(View view) {
+        progress = ProgressDialog.show(CadastrarDenuncia.this, "Aguarde...",
+                "Enviando sua denúncia", true);
         SharedPreferences pref = getApplicationContext().getSharedPreferences("idUsuario", 0);
         int idUsuario=pref.getInt("idUsuario", 0);
 
@@ -302,10 +306,12 @@ public class CadastrarDenuncia extends FragmentActivity implements
         }
         if (d.getDescricao() == null || d.getDescricao().equals("")) {
             msg += " Adicione uma descrição a denúncia! ";
+
         }
 
         if (!msg.equals("")) {
             Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+            progress.dismiss();
         }
 
     }
@@ -319,7 +325,7 @@ public class CadastrarDenuncia extends FragmentActivity implements
             Intent intent = getIntent();
             finish();
             startActivity(intent);
-
+            progress.dismiss();
             if(rsp.getBoolean("resposta")){
                 Toast.makeText(CadastrarDenuncia.this, "Upload efetuado com sucesso!", Toast.LENGTH_SHORT).show();
             }else{

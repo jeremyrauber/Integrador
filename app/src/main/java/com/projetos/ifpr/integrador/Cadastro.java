@@ -1,6 +1,7 @@
 package com.projetos.ifpr.integrador;
 
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -24,6 +25,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,6 +66,7 @@ import cz.msebera.android.httpclient.util.EntityUtils;
 
 public class Cadastro extends AppCompatActivity {
     EditText nome, login, senha;
+    ProgressDialog progress;
 
 
     @Override
@@ -87,8 +90,10 @@ public class Cadastro extends AppCompatActivity {
             public void onClick(View view) {
 
                System.out.println( nome.getText().toString()+ " | "+ login.getText().toString()+ " | "+ senha.getText().toString());
+               progress = ProgressDialog.show(Cadastro.this, "Aguarde...",
+                        "Realizando Cadastro", true);
 
-                ChamadaWeb chamada = new ChamadaWeb("http://"+
+               ChamadaWeb chamada = new ChamadaWeb("http://"+
                         ConfiguracaoServidor.retornarEnderecoServidor(Cadastro.this)
                         +":8090/IntegradorWS/rest/servicos/cadastro", nome.getText().toString(), login.getText().toString(),
                         senha.getText().toString(), maskedEditText.getUnmaskedText().toString(),2);
@@ -169,11 +174,13 @@ public class Cadastro extends AppCompatActivity {
             return null;
         }
 
-        public void onPostExecute(String resultado)
-        {
+        public void onPostExecute(String resultado){
+            progress.dismiss();
             if(resultado != null){
                 System.out.println(resultado);
                 atualizaMensagem(resultado);
+            }else{
+                Toast.makeText(Cadastro.this, "Você não está conectado! Verifique sua conexão com a internet", Toast.LENGTH_SHORT).show();
             }
         }
     }

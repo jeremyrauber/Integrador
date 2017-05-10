@@ -1,6 +1,7 @@
 package com.projetos.ifpr.integrador.Fragments;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,8 +18,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-
 import android.widget.Toast;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -29,7 +30,9 @@ import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.maps.android.heatmaps.Gradient;
 import com.google.maps.android.heatmaps.HeatmapTileProvider;
+import com.projetos.ifpr.integrador.CadastrarDenuncia;
 import com.projetos.ifpr.integrador.Helper.ConfiguracaoServidor;
+import com.projetos.ifpr.integrador.Helper.GPSTracker;
 import com.projetos.ifpr.integrador.Inicial;
 import com.projetos.ifpr.integrador.R;
 
@@ -88,7 +91,7 @@ public class FragmentMapa extends FragmentActivity  implements OnMapReadyCallbac
     private boolean mDefaultOpacity = true;
     private String pontosFromWebService;
     private boolean variavelControleInternet;
-    private boolean variavelControleGpsON = true;
+    private ProgressDialog progress;
 
 
     /**
@@ -102,8 +105,8 @@ public class FragmentMapa extends FragmentActivity  implements OnMapReadyCallbac
     android.location.LocationListener glocListener;
     LocationManager nlocManager;
     android.location.LocationListener nlocListener;
-    private double glat;
-    private double glng;
+
+    private LatLng FozdoIguacu;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -115,7 +118,10 @@ public class FragmentMapa extends FragmentActivity  implements OnMapReadyCallbac
                 +":8090/IntegradorWS/rest/servicos/consultaMapaCalor");
         chamada.execute();
 
-        showLoc();
+        progress = ProgressDialog.show(this, "Aguarde...",
+                "Consultando servidor", true);
+
+
     }
 
     @Override
@@ -126,13 +132,6 @@ public class FragmentMapa extends FragmentActivity  implements OnMapReadyCallbac
     }
 
     protected void startDemo() {
-
-        Toast.makeText(FragmentMapa.this, "Lat:"+ String.format("%.04f", glat)+"| Lng:"+String.format("%.04f", glng), Toast.LENGTH_SHORT).show();
-        LatLng FozdoIguacu = new LatLng(glat,glng);
-
-        mMap.addMarker(new MarkerOptions().position(FozdoIguacu).title("Sua Localização"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(FozdoIguacu, 13));
-
 
         // Set up the spinner/dropdown list
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
@@ -187,9 +186,17 @@ public class FragmentMapa extends FragmentActivity  implements OnMapReadyCallbac
 
     @Override
     public void onMapReady(GoogleMap map) {
-        if (mMap != null) {
-            return;
-        }
+
+        mMap = map;
+        GPSTracker gps = new GPSTracker(this);
+
+        LatLng FozdoIguacu = new LatLng(gps.getLatitude(),gps.getLongitude());
+
+        mMap.getMaxZoomLevel();
+        mMap.addMarker(new MarkerOptions()
+                .position(FozdoIguacu)
+                .title("Sua localização"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(FozdoIguacu,13));
         mMap = map;
     }
 
@@ -201,18 +208,17 @@ public class FragmentMapa extends FragmentActivity  implements OnMapReadyCallbac
                                    int pos, long id) {
             String dataset = parent.getItemAtPosition(pos).toString();
 
-            if(variavelControleInternet) {
-                // Check if need to instantiate (avoid setData etc twice)
-                if (mProvider == null) {
-                    mProvider = new HeatmapTileProvider.Builder().data(
-                            mLists.get(getString(R.string.foco)).getData()).build();
-                    mOverlay = mMap.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
-                    // Render links
-                } else {
-                    mProvider.setData(mLists.get(dataset).getData());
-                    mOverlay.clearTileCache();
-                }
+            // Check if need to instantiate (avoid setData etc twice)
+            if (mProvider == null) {
+                mProvider = new HeatmapTileProvider.Builder().data(
+                        mLists.get(getString(R.string.foco)).getData()).build();
+                mOverlay = mMap.addTileOverlay(new TileOverlayOptions().tileProvider(mProvider));
+                // Render links
+            } else {
+                mProvider.setData(mLists.get(dataset).getData());
+                mOverlay.clearTileCache();
             }
+
 
         }
 
@@ -254,6 +260,7 @@ public class FragmentMapa extends FragmentActivity  implements OnMapReadyCallbac
 
     private void setUpMap() {
         ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMapAsync(this);
+        startDemo();
     }
 
 
@@ -279,19 +286,15 @@ public class FragmentMapa extends FragmentActivity  implements OnMapReadyCallbac
         }
 
         public void onPostExecute(String resultado) {
+            progress.dismiss();
+
             if (resultado != null) {
                 pontosFromWebService = resultado;
                 System.out.println(resultado);
                 setUpMap();
-                variavelControleInternet = true;
-                Toast.makeText(FragmentMapa.this, "Usando banco de dados online!", Toast.LENGTH_SHORT).show();
-                Toast.makeText(FragmentMapa.this, "Aguarde buscando sua localização...", Toast.LENGTH_LONG).show();
+                Toast.makeText(FragmentMapa.this, "Usando dados online!", Toast.LENGTH_SHORT).show();
             }else{
-                InputStream inputStream = getResources().openRawResource(R.raw.police);
-                pontosFromWebService =new Scanner(inputStream).useDelimiter("\\A").next();
-
-                variavelControleInternet = false;
-                Toast.makeText(FragmentMapa.this, "Não foi possível conectar com o banco de dados, verifique sua conexão e tente novamente", Toast.LENGTH_SHORT).show();
+                Toast.makeText(FragmentMapa.this, "Você não está conectado à internet. Não será possível exibir o HeatMap", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -300,130 +303,8 @@ public class FragmentMapa extends FragmentActivity  implements OnMapReadyCallbac
     @Override
     public void onDestroy() {
 
-        //Remove GPS location update
-        if(glocManager != null){
-            glocManager.removeUpdates(glocListener);
-            Log.d("ServiceForLatLng", "GPS Update Released");
-        }
-
-        //Remove Network location update
-        if(nlocManager != null){
-            nlocManager.removeUpdates(nlocListener);
-            Log.d("ServiceForLatLng", "Network Update Released");
-        }
         super.onDestroy();
 
-    }
-
-
-    //This is for Lat lng which is determine by your wireless or mobile network
-
-    public class MyLocationListenerNetWork implements android.location.LocationListener
-    {
-        @Override
-        public void onLocationChanged(Location loc){
-            double nlat = loc.getLatitude();
-            double nlng = loc.getLongitude();
-
-            //Setting the Network Lat, Lng into the textView
-
-            Log.d("LAT & LNG Network:", nlat + " " + nlng);
-        }
-
-        @Override
-        public void onProviderDisabled(String provider)
-        {
-            Log.d("LOG", "Network is OFF!");
-        }
-        @Override
-        public void onProviderEnabled(String provider){
-            Log.d("LOG", "Thanks for enabling Network !");
-        }
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras){
-        }
-    }
-
-    public class MyLocationListenerGPS implements android.location.LocationListener{
-        @Override
-        public void onLocationChanged(Location loc){
-            glat = loc.getLatitude();
-            glng = loc.getLongitude();
-
-            //Setting the GPS Lat, Lng into the textView
-
-            Log.d("LAT & LNG GPS:", glat + " " + glng);
-
-            if(variavelControleGpsON){
-                startDemo();
-                variavelControleGpsON = false;
-            }
-        }
-
-        @Override
-        public void onProviderDisabled(String provider)
-        {
-            Log.d("LOG", "GPS is OFF!");
-        }
-        @Override
-        public void onProviderEnabled(String provider){
-            Log.d("LOG", "Thanks for enabling GPS !");
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras){
-        }
-    }
-
-    public void showLoc() {
-
-        //Location access ON or OFF checking
-        ContentResolver contentResolver = getBaseContext().getContentResolver();
-        boolean gpsStatus = Settings.Secure.isLocationProviderEnabled(contentResolver, LocationManager.GPS_PROVIDER);
-        boolean networkWifiStatus = Settings.Secure.isLocationProviderEnabled(contentResolver, LocationManager.NETWORK_PROVIDER);
-
-        //If GPS and Network location is not accessible show an alert and ask user to enable both
-        if(!gpsStatus || !networkWifiStatus)
-        {
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(FragmentMapa.this);
-
-            alertDialog.setTitle("Make your location accessible ...");
-            alertDialog.setMessage("Your Location is not accessible to us.To show location you have to enable it.");
-            //alertDialog.setIcon(R.drawable.warning);
-
-            alertDialog.setNegativeButton("Enable", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    startActivityForResult(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0);
-                }
-            });
-
-            alertDialog.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog,int which) {
-                    Toast.makeText(getApplicationContext(), "Remember to show location you have to eanable it !", Toast.LENGTH_SHORT).show();
-                    dialog.cancel();
-                }
-            });
-
-            alertDialog.show();
-        }
-        //IF GPS and Network location is accessible
-        else
-        {
-            nlocManager   = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-            nlocListener = new MyLocationListenerNetWork();
-            nlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
-                    1000 * 1,  // 1 Sec
-                    0,         // 0 meter
-                    nlocListener);
-
-
-            glocManager  = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-            glocListener = new MyLocationListenerGPS();
-            glocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                    1000 * 1,  // 1 Sec
-                    0,         // 0 meter
-                    glocListener);
-        }
     }
 
 

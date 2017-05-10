@@ -3,30 +3,16 @@ package com.projetos.ifpr.integrador.Fragments;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.projetos.ifpr.integrador.Consulta;
-import com.projetos.ifpr.integrador.Editar;
 import com.projetos.ifpr.integrador.Helper.ConfiguracaoServidor;
 import com.projetos.ifpr.integrador.Inicial;
-import com.projetos.ifpr.integrador.MainActivity;
 import com.projetos.ifpr.integrador.R;
 import com.projetos.ifpr.integrador.VisualizaDenuncia;
 
@@ -36,21 +22,16 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import cz.msebera.android.httpclient.HttpResponse;
 import cz.msebera.android.httpclient.NameValuePair;
 import cz.msebera.android.httpclient.client.HttpClient;
 import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
-import cz.msebera.android.httpclient.client.methods.HttpGet;
 import cz.msebera.android.httpclient.client.methods.HttpPost;
-import cz.msebera.android.httpclient.client.utils.URLEncodedUtils;
 import cz.msebera.android.httpclient.impl.client.HttpClientBuilder;
 import cz.msebera.android.httpclient.message.BasicNameValuePair;
 import cz.msebera.android.httpclient.util.EntityUtils;
-
-import static com.projetos.ifpr.integrador.R.mipmap.ic_launcher;
 
 /**
  * Created by jeremy on 30/03/2017.
@@ -65,7 +46,6 @@ public class FragmentBuscar  extends FragmentActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.consulta_denuncias);
 
-
         containerAddress = LinearLayout.class.cast(findViewById(R.id.containerAddress));
 
         SharedPreferences pref = getApplicationContext().getSharedPreferences("idUsuario", 0);
@@ -76,9 +56,6 @@ public class FragmentBuscar  extends FragmentActivity implements View.OnClickLis
                 +":8090/IntegradorWS/rest/servicos/consultaDenuncias",String.valueOf(idUsuario));
 
         chamada.execute();
-
-
-
 
     }
 
@@ -96,9 +73,12 @@ public class FragmentBuscar  extends FragmentActivity implements View.OnClickLis
                 final LinearLayout linearLayout = new LinearLayout(getApplicationContext());
                 final TextView txtView = new TextView(linearLayout.getContext());
                 final Button btn = new Button(linearLayout.getContext());
+                    btn.setText("Abrir");
+
+
                 linearLayout.setOrientation(LinearLayout.HORIZONTAL);
                 linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                txtView.setText(jsonO.getString("id")+jsonO.getString("descricao"));
+                txtView.setText(jsonO.getString("id")+" - "+jsonO.getString("descricao"));
                 txtView.setTextSize(20);
                 txtView.setTextColor(Color.parseColor("#000000"));
                 btn.setId(Integer.parseInt(jsonO.getString("id")));

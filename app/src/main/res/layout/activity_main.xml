@@ -11,22 +11,24 @@
     <ImageView
         android:id="@+id/imageView1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_margin="5dp"
-        android:layout_weight="8000"
+        android:layout_weight="0.6"
         android:src="@drawable/imagem2" />
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_height="0dp"
+        android:layout_weight="0.05"
         android:layout_margin="5dp"
+        android:textSize="16dp"
+        android:textStyle="bold"
         android:text="@string/login" />
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_height="0dp"
+        android:layout_weight="0.1"
         android:layout_margin="5dp"
         android:inputType="text"
         android:text="admin"
@@ -35,14 +37,16 @@
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_height="0dp"
+        android:layout_weight="0.05"
         android:layout_margin="5dp"
+        android:textSize="16dp"
+        android:textStyle="bold"
         android:text="@string/senha" />
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_height="0dp"
+        android:layout_weight="0.1"
         android:layout_margin="5dp"
         android:id="@+id/senha"
         android:inputType="textPassword"
@@ -51,27 +55,26 @@
 
     <LinearLayout
         android:id="@+id/LinearLayout02"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".15"
         android:layout_margin="5dp"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:gravity="center">
 
-    <Button
-        android:text="Logar"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_weight="1"
-        android:id="@+id/btnLogar"/>
-    <Button
-        android:text="Cadastrar"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/btnCadastrar"
-        android:layout_gravity="left"
-        android:onClick="sendMessage"
-        android:layout_weight="1"/>
+        <Button
+            android:text="Logar"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:id="@+id/btnLogar"/>
+        <Button
+            android:text="Cadastrar"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnCadastrar"
+            android:layout_gravity="center"
+            android:onClick="sendMessage"/>
 
     </LinearLayout>
 
@@ -80,10 +83,11 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_margin="5dp"
+
         android:background="@drawable/ic_settings_remote_black_24dp"
         android:id="@+id/btnServidor"
         android:layout_gravity="right"
         android:onClick="abrirEndereco"
-        android:layout_weight="1"/>
+        android:layout_weight="0.05"/>
 
 </LinearLayout>

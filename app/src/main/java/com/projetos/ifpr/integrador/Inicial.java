@@ -18,20 +18,23 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.projetos.ifpr.integrador.Fragments.FragmentBuscar;
-import com.projetos.ifpr.integrador.Fragments.FragmentEditar;
 import com.projetos.ifpr.integrador.Fragments.FragmentMapa;
 import com.projetos.ifpr.integrador.Fragments.FragmentPreferencias;
 
 public class Inicial extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-
+    private TextView txtUsuario;
+    private TextView txtTelefone;
     private static final int PERMISSIONS_REQUEST_PHONE_CALL = 100;
     private static String[] PERMISSIONS_PHONECALL = {Manifest.permission.CALL_PHONE};
     private Button btnAdd;
+    private TextView likes;
+    private TextView dislikes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +44,11 @@ public class Inicial extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         btnAdd = (Button) findViewById(R.id.btnAdd);
+        likes = (TextView) findViewById(R.id.likes);
+        dislikes = (TextView) findViewById(R.id.dislikes);
 
-
+        likes.setText("101");
+        dislikes.setText("05");
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -51,6 +57,13 @@ public class Inicial extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        View hView =  navigationView.getHeaderView(0);
+        TextView nav_user = (TextView)hView.findViewById(R.id.nomeUsuario);
+        TextView nav_cel = (TextView)hView.findViewById(R.id.telefoneUsuario);
+        nav_user.setText("Teste");
+        nav_cel.setText("99999-9999");
+
     }
 
     @Override

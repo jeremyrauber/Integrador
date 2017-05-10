@@ -3,7 +3,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:screenOrientation="portrait">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -15,7 +16,6 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             style="@style/Widget.AppCompat.Button.Borderless.Colored"
-
             android:text="Raio"
             android:onClick="changeRadius" />
 
@@ -54,5 +54,5 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Desenvolvido pelos melhores ®"/>
+        android:text="IFPR Enterprise ®"/>
 </LinearLayout>

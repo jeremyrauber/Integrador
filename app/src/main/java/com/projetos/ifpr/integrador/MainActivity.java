@@ -1,5 +1,6 @@
 package com.projetos.ifpr.integrador;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -36,6 +37,7 @@ import cz.msebera.android.httpclient.util.EntityUtils;
 public class MainActivity extends AppCompatActivity {
     EditText login, senha;
     String IDusuario;
+    ProgressDialog progress;
     public final static String EXTRA_MESSAGE = "com.example.crash.MESSAGE";
 
     @Override
@@ -57,6 +59,10 @@ public class MainActivity extends AppCompatActivity {
         btnLogar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
+                   progress = ProgressDialog.show(MainActivity.this, "Aguarde...",
+                            "Verificando suas credenciais", true);
+
                     ChamadaWeb chamada = new ChamadaWeb("http://"+
                             PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getString("ENDERECOSERVIDOR", "10.0.0.2")
                             + ":8090/IntegradorWS/rest/servicos/login",
@@ -130,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
                 }else if(tipoChamada == 2){
 
                         HttpPost chamada = new HttpPost(enderecoWeb);
-                        List<NameValuePair> parametros = new ArrayList<NameValuePair>(2); //o 3 eh referente ao numero de params
+                        List<NameValuePair> parametros = new ArrayList<NameValuePair>(2); //o 2 eh referente ao numero de params
 
                         parametros.add(new BasicNameValuePair("login", usuario.getLogin()));
                         parametros.add(new BasicNameValuePair("senha", usuario.getSenha()));
@@ -149,8 +155,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void onPostExecute(String resultado){
+            progress.dismiss();
             if(resultado != null){
                 retornaMensagem(resultado);
+            }else{
+                Toast.makeText(MainActivity.this, "Você não está conectado! Verifique sua conexão com a internet", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -165,8 +174,6 @@ public class MainActivity extends AppCompatActivity {
         startMain.addCategory(Intent.CATEGORY_HOME);
         startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(startMain);
-
     }
-
 
 }

@@ -29,7 +29,7 @@
             <item
                 android:id="@+id/nav_info"
                 android:icon="@android:drawable/ic_dialog_info"
-                android:title="Desenvolvido pelos melhores" />
+                android:title="IFPR Enterprise ®" />
         </menu>
     </item>
 

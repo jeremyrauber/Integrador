@@ -1,6 +1,7 @@
 package com.projetos.ifpr.integrador;
 
 import android.app.FragmentManager;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -19,6 +20,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
@@ -65,26 +67,15 @@ import cz.msebera.android.httpclient.util.EntityUtils;
  * Created by Crash on 16/04/2017.
  */
 
-public class VisualizaDenuncia extends FragmentActivity implements
+public class VisualizaDenuncia extends AppCompatActivity implements
         OnMapReadyCallback,
         ActivityCompat.OnRequestPermissionsResultCallback {
 
 
     private GoogleMap mMap;
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-    private boolean mPermissionDenied = false;
     private ImageView imageView;
-    private Button btnExcluir;
-    private Button btnAdicionar;
     private TextView textInfo;
-    private EditText edtDescricao;
-    private String img_str;
-    private Denuncia d;
-    private byte[] image;
-    private Bitmap fotoquevaiproupload;
-
-//http://stackoverflow.com/questions/42330052/the-photo-lose-its-quality-when-it-appears-into-the-imageview
-
+    private ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +85,9 @@ public class VisualizaDenuncia extends FragmentActivity implements
 
         imageView = (ImageView) findViewById(R.id.fotoThumb);
         textInfo = (TextView) findViewById(R.id.txtDescricao);
+
+        progress = ProgressDialog.show(VisualizaDenuncia.this, "Aguarde...",
+                "Carregando dados da denúncia", true);
 
         SharedPreferences pref = getApplicationContext().getSharedPreferences("denuncia", 0);
         final int idDenuncia = pref.getInt("idDenuncia", 0);
@@ -141,6 +135,8 @@ public class VisualizaDenuncia extends FragmentActivity implements
     {
         JSONObject rsp = null;
         try {
+
+            progress.dismiss();
             rsp = new JSONObject(resultado);
 
             SharedPreferences pref = getApplicationContext().getSharedPreferences("denuncia", 0); // 0 - for private mode

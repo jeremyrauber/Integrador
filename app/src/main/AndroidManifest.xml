@@ -65,15 +65,6 @@
             android:screenOrientation="portrait"></activity>
 
         <!-- Declaracao da Activity da tela de cadastro -->
-        <activity
-            android:name="com.projetos.ifpr.integrador.Consulta"
-            android:label="Consulta "
-            android:parentActivityName="com.projetos.ifpr.integrador.MainActivity"
-            android:screenOrientation="portrait">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.projetos.ifpr.integrador.MainActivity" />
-        </activity>
 
         <activity android:name=".Fragments.FragmentMapa"
             android:screenOrientation="portrait"/>
@@ -88,7 +79,11 @@
             android:screenOrientation="portrait"/>
 
         <activity android:name=".VisualizaDenuncia"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            </activity>
 
         <activity android:name=".Fragments.FragmentBuscar"
             android:screenOrientation="portrait"/>
