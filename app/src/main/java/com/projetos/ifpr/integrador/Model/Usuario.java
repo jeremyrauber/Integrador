@@ -14,6 +14,8 @@ public class Usuario {
     private String senha;
     private String telefone;
     private Date dataUltimoLogin;
+    private Integer likes;
+    private Integer dislikes;
 
     public Date getDataUltimoLogin() {
         return dataUltimoLogin;
@@ -61,5 +63,27 @@ public class Usuario {
 
     public void setTelefone(String telefone) {
         this.telefone = telefone;
+    }
+
+    public Integer getLikes() {
+        if(likes!=null)
+            return likes;
+        else
+            return 0;
+    }
+
+    public void setLikes(Integer likes) {
+        this.likes = likes;
+    }
+
+    public Integer getDislikes() {
+        if(dislikes!=null)
+            return dislikes;
+        else
+            return 0;
+    }
+
+    public void setDislikes(Integer dislikes) {
+        this.dislikes = dislikes;
     }
 }

@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.projetos.ifpr.integrador.Helper.ConfiguracaoServidor;
 import com.projetos.ifpr.integrador.Model.Usuario;
 
@@ -37,8 +38,8 @@ import cz.msebera.android.httpclient.util.EntityUtils;
 public class MainActivity extends AppCompatActivity {
     EditText login, senha;
     String IDusuario;
+    private Usuario usuario;
     ProgressDialog progress;
-    public final static String EXTRA_MESSAGE = "com.example.crash.MESSAGE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,9 +68,6 @@ public class MainActivity extends AppCompatActivity {
                             PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getString("ENDERECOSERVIDOR", "10.0.0.2")
                             + ":8090/IntegradorWS/rest/servicos/login",
                             "", login.getText().toString(), senha.getText().toString(), 2);
-                    System.out.println("http://"+
-                            PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getString("ENDERECOSERVIDOR", "10.0.0.2")
-                            + ":8090/IntegradorWS/rest/servicos/login");
                     chamada.execute();
                 }
         });
@@ -89,13 +87,24 @@ public class MainActivity extends AppCompatActivity {
             JSONObject rsp = new JSONObject(resultado);
 
             if(rsp.getBoolean("resposta")){
-                Intent  i = new Intent(getApplicationContext(),Inicial.class);
-                i.putExtra(EXTRA_MESSAGE, rsp.getString("idUsuario"));
+                System.out.println(">>>>>>>>>>>>>>>>>>>>"+ rsp.getString("idUsuario"));
+
+
+                //Adiciona idUsuario como preferencia, podendo ser acesso de qualquer lugar desse mundao Androidiano
+                PreferenceManager.getDefaultSharedPreferences(this).edit().putString("idUsuario", rsp.getString("idUsuario")).commit();
+
+                ChamadaWeb2 chamada = new ChamadaWeb2("http://"+
+                        ConfiguracaoServidor.retornarEnderecoServidor(this)
+                        +":8090/IntegradorWS/rest/servicos/trazum",Integer.parseInt(rsp.getString("idUsuario")),2);
+                chamada.execute();
+
+
+                // Nao sei o que faz?!
                 SharedPreferences pref = getApplicationContext().getSharedPreferences("idUsuario", 0); // 0 - for private mode
                 SharedPreferences.Editor editor = pref.edit();
                 editor.putInt("idUsuario", Integer.parseInt(rsp.getString("idUsuario")));
                 editor.commit();
-                startActivity(i);
+
             }
             else{
                 Toast.makeText(this.getBaseContext(), "Usuário ou senha não conferem! Tente Novamente.", Toast.LENGTH_SHORT).show();
@@ -175,5 +184,76 @@ public class MainActivity extends AppCompatActivity {
         startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(startMain);
     }
+
+    private class ChamadaWeb2 extends AsyncTask<String, Void, String> {
+        private String enderecoWeb;
+        private int idUsuario;
+        private int tipoChamada;  //1 - GET 2 - POST
+
+
+        public  ChamadaWeb2(String endereco,int id, int tipo){
+
+            enderecoWeb = endereco;
+            idUsuario = id;
+            tipoChamada = tipo;
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            HttpClient cliente = HttpClientBuilder.create().build();
+
+            try {
+                if(tipoChamada == 1){
+                    HttpGet chamada = new HttpGet(enderecoWeb);
+                    HttpResponse resposta = cliente.execute(chamada);
+                    return EntityUtils.toString(resposta.getEntity());
+
+                }else if(tipoChamada == 2){
+
+                    HttpPost chamada = new HttpPost(enderecoWeb);
+                    List<NameValuePair> parametros = new ArrayList<NameValuePair>(1); //o 2 eh referente ao numero de params
+
+                    parametros.add(new BasicNameValuePair("id", String.valueOf(idUsuario)));
+
+                    chamada.setEntity(new UrlEncodedFormEntity(parametros));
+                    HttpResponse resposta = cliente.execute(chamada);
+                    String responseBody = EntityUtils.toString(resposta.getEntity()); // eh a resposta da servlet
+                    return responseBody;
+
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        public void onPostExecute(String resultado){
+
+            if(resultado!=null) {
+                Gson gson = new Gson();
+                System.out.println("----------------------------" + resultado);
+                usuario = gson.fromJson(resultado, Usuario.class);
+                System.out.println(usuario.getLikes().toString()+"-"+usuario.getDislikes().toString()+"-"+
+                        usuario.getNome().toString()+"-"+usuario.getTelefone().toString());
+
+
+                SharedPreferences pref = getApplicationContext().getSharedPreferences("usuario", 0); // 0 - for private mode
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putString("nome", usuario.getNome().toString() );
+                editor.putString("cel", usuario.getTelefone().toString() );
+                editor.putString("likes", usuario.getLikes().toString() );
+                editor.putString("dislikes", usuario.getDislikes().toString() );
+                editor.commit();
+
+                Intent  i = new Intent(getBaseContext(),Inicial.class);
+                i.putExtra("EXTRA_SESSION_ID", usuario.getId());
+                startActivity(i);
+            }
+        }
+    }
+
+
+
 
 }

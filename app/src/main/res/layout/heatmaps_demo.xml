@@ -4,41 +4,43 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:screenOrientation="portrait">
+    android:screenOrientation="portrait"
+    android:background="@android:color/white">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <Button
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"
-            android:text="Raio"
-            android:onClick="changeRadius" />
+            android:layout_weight="1"
+            android:onClick="changeRadius"
+            android:text="Raio" />
 
         <Button
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"
-            android:text="Gradiente"
-            android:onClick="changeGradient" />
+            android:layout_weight="1"
+            android:onClick="changeGradient"
+            android:text="Gradiente" />
 
 
         <Button
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored"
-            android:text="Opacidade"
-            android:onClick="changeOpacity" />
+            android:layout_weight="1"
+            android:onClick="changeOpacity"
+            android:text="Opacidade" />
 
     </LinearLayout>
 
     <Spinner
+        style="@style/Widget.AppCompat.Button"
         android:id="@+id/spinner"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />

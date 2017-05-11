@@ -5,7 +5,14 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -37,7 +44,7 @@ import cz.msebera.android.httpclient.util.EntityUtils;
  * Created by jeremy on 30/03/2017.
  */
 
-public class FragmentBuscar  extends FragmentActivity implements View.OnClickListener  {
+public class FragmentBuscar  extends AppCompatActivity implements View.OnClickListener  {
 
     private LinearLayout containerAddress;
 
@@ -45,6 +52,7 @@ public class FragmentBuscar  extends FragmentActivity implements View.OnClickLis
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.consulta_denuncias);
+
 
         containerAddress = LinearLayout.class.cast(findViewById(R.id.containerAddress));
 
@@ -57,6 +65,13 @@ public class FragmentBuscar  extends FragmentActivity implements View.OnClickLis
 
         chamada.execute();
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
     }
 
     public void atualizaMensagem(String resultado)
@@ -179,9 +194,13 @@ public class FragmentBuscar  extends FragmentActivity implements View.OnClickLis
         txtView.setTextColor(Color.parseColor("#000000"));
         btn.setId(R.id.selectionDetails);
         btn.setText("Abrir");
+
         //Seta os parametros
-        txtView.setLayoutParams(new LinearLayout.LayoutParams(350, LinearLayout.LayoutParams.WRAP_CONTENT));
-        btn.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        txtView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        txtView.setGravity(Gravity.CENTER);
+        txtView.setPadding(20, 20, 20, 20);
+        btn.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT));
+
         //adiciona no containerAddress
         linearLayout.addView(txtView);
         linearLayout.addView(btn);

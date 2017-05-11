@@ -101,6 +101,7 @@ public class CadastrarDenuncia extends FragmentActivity implements
         textInfo = (TextView) findViewById(R.id.textoInfo);
         edtDescricao = (EditText) findViewById(R.id.edtDescricao);
         btnAdicionar = (Button) findViewById(R.id.btnAdicionar);
+
     }
 
     @Override
@@ -269,8 +270,14 @@ public class CadastrarDenuncia extends FragmentActivity implements
     }
 
     public void enviarDenuncia(View view) {
+
         progress = ProgressDialog.show(CadastrarDenuncia.this, "Aguarde...",
                 "Enviando sua denúncia", true);
+
+        realizarEtapas();
+    }
+
+    public void realizarEtapas(){
         SharedPreferences pref = getApplicationContext().getSharedPreferences("idUsuario", 0);
         int idUsuario=pref.getInt("idUsuario", 0);
 
@@ -313,8 +320,9 @@ public class CadastrarDenuncia extends FragmentActivity implements
             Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
             progress.dismiss();
         }
-
     }
+
+
 
     public void atualizaMensagem(String resultado)
     {

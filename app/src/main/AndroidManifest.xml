@@ -44,7 +44,8 @@
 
         <activity android:name="com.projetos.ifpr.integrador.MainActivity"
             android:theme="@style/AppTheme"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:excludeFromRecents="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -67,15 +68,20 @@
         <!-- Declaracao da Activity da tela de cadastro -->
 
         <activity android:name=".Fragments.FragmentMapa"
+            android:theme="@style/AppTheme"
             android:screenOrientation="portrait"/>
 
         <activity android:name=".Fragments.FragmentPreferencias"
+            android:theme="@style/AppTheme"
+            android:label="Preferências"
             android:screenOrientation="portrait"/>
 
         <activity android:name=".Fragments.FragmentEditar"
             android:screenOrientation="portrait"/>
 
         <activity android:name=".Editar"
+            android:theme="@style/AppTheme"
+            android:label="Editar Informações"
             android:screenOrientation="portrait"/>
 
         <activity android:name=".VisualizaDenuncia"
@@ -86,15 +92,17 @@
             </activity>
 
         <activity android:name=".Fragments.FragmentBuscar"
+            android:theme="@style/AppTheme"
+            android:label="Buscar Denúncias"
             android:screenOrientation="portrait"/>
 
         <activity android:name=".Helper.ConfiguracaoServidor"
             android:screenOrientation="portrait"/>
 
         <activity android:name=".CadastrarDenuncia"
+            android:theme="@style/AppTheme"
+            android:label="Cadastrar Denúncias"
             android:screenOrientation="portrait"/>
-
-
 
         <provider
             android:name="android.support.v4.content.FileProvider"

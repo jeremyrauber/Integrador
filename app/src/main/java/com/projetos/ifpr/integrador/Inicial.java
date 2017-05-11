@@ -1,11 +1,15 @@
 package com.projetos.ifpr.integrador;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 
 import android.support.v4.app.Fragment;
@@ -15,26 +19,52 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.method.TextKeyListener;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.drive.metadata.CustomPropertyKey;
+import com.google.gson.Gson;
 import com.projetos.ifpr.integrador.Fragments.FragmentBuscar;
 import com.projetos.ifpr.integrador.Fragments.FragmentMapa;
 import com.projetos.ifpr.integrador.Fragments.FragmentPreferencias;
+import com.projetos.ifpr.integrador.Helper.ConfiguracaoServidor;
+import com.projetos.ifpr.integrador.Model.Usuario;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import cz.msebera.android.httpclient.HttpResponse;
+import cz.msebera.android.httpclient.NameValuePair;
+import cz.msebera.android.httpclient.client.HttpClient;
+import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
+import cz.msebera.android.httpclient.client.methods.HttpGet;
+import cz.msebera.android.httpclient.client.methods.HttpPost;
+import cz.msebera.android.httpclient.impl.client.HttpClientBuilder;
+import cz.msebera.android.httpclient.message.BasicNameValuePair;
+import cz.msebera.android.httpclient.util.EntityUtils;
 
 public class Inicial extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private TextView txtUsuario;
-    private TextView txtTelefone;
+
     private static final int PERMISSIONS_REQUEST_PHONE_CALL = 100;
-    private static String[] PERMISSIONS_PHONECALL = {Manifest.permission.CALL_PHONE};
+    public final static String EXTRA_MESSAGE = "com.example.crash.MESSAGE";
     private Button btnAdd;
     private TextView likes;
     private TextView dislikes;
+    private Integer id;
+
+    private TextView nav_user;
+    private TextView nav_cel;
+    private ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,12 +73,18 @@ public class Inicial extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        progress = ProgressDialog.show(this, "Aguarde...","Verificando suas credenciais", true);
+
+        id = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this).getString("idUsuario", ""));
+
+
+
         btnAdd = (Button) findViewById(R.id.btnAdd);
         likes = (TextView) findViewById(R.id.likes);
         dislikes = (TextView) findViewById(R.id.dislikes);
 
-        likes.setText("101");
-        dislikes.setText("05");
+
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -59,12 +95,21 @@ public class Inicial extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         View hView =  navigationView.getHeaderView(0);
-        TextView nav_user = (TextView)hView.findViewById(R.id.nomeUsuario);
-        TextView nav_cel = (TextView)hView.findViewById(R.id.telefoneUsuario);
-        nav_user.setText("Teste");
-        nav_cel.setText("99999-9999");
+        nav_user = (TextView)hView.findViewById(R.id.nomeUsuario);
+        nav_cel = (TextView)hView.findViewById(R.id.telefoneUsuario);
+
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("usuario", 0);
+
+        final double log = Double.parseDouble(pref.getString("log", "0"));
+
+        likes.setText(pref.getString("likes", "0"));
+        dislikes.setText(pref.getString("dislikes", "0"));
+        nav_user.setText(pref.getString("nome", "0"));
+        nav_cel.setText(pref.getString("cel", "0"));
+        progress.dismiss();
 
     }
+
 
     @Override
     public void onBackPressed() {
@@ -102,8 +147,18 @@ public class Inicial extends AppCompatActivity
             startActivity(intent);
 
         } else if (id == R.id.nav_call) {
-           // fragmentClass = FragmentChamadas.class; acho q nao precisa abrir novo fragment
+            // fragmentClass = FragmentChamadas.class; acho q nao precisa abrir novo fragment
             call();
+        } else if (id == R.id.nav_logout) {
+            SharedPreferences mySPrefs =PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences.Editor editor = mySPrefs.edit();
+            editor.remove("usuario");
+            editor.remove("idUsuario");
+            editor.apply();
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                finishAffinity();
+            }
         }
 
         try {
@@ -158,4 +213,9 @@ public class Inicial extends AppCompatActivity
         Intent  i = new Intent(getApplicationContext(),CadastrarDenuncia.class);
         startActivity(i);
     }
+
+
+
+
+
 }
