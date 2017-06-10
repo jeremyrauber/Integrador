@@ -88,12 +88,11 @@ public class FragmentBuscar  extends AppCompatActivity implements View.OnClickLi
                 final LinearLayout linearLayout = new LinearLayout(getApplicationContext());
                 final TextView txtView = new TextView(linearLayout.getContext());
                 final Button btn = new Button(linearLayout.getContext());
-                    btn.setText("Abrir");
 
 
                 linearLayout.setOrientation(LinearLayout.HORIZONTAL);
                 linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                txtView.setText(jsonO.getString("id")+" - "+jsonO.getString("descricao"));
+                txtView.setText(jsonO.getString("descricao"));
                 txtView.setTextSize(20);
                 txtView.setTextColor(Color.parseColor("#000000"));
                 btn.setId(Integer.parseInt(jsonO.getString("id")));
@@ -101,6 +100,7 @@ public class FragmentBuscar  extends AppCompatActivity implements View.OnClickLi
                 //Seta os parametros
                 txtView.setLayoutParams(new LinearLayout.LayoutParams(350, LinearLayout.LayoutParams.WRAP_CONTENT));
                 btn.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                btn.setBackgroundResource(R.drawable.ic_trending_flat_black_24dp);
                 //adiciona no containerAddress
                 linearLayout.addView(txtView);
                 linearLayout.addView(btn);
@@ -177,33 +177,5 @@ public class FragmentBuscar  extends AppCompatActivity implements View.OnClickLi
                 atualizaMensagem(resultado);
             }
         }
-    }
-
-
-    private void addEditText() {
-        //Criamos o EditText
-        final LinearLayout linearLayout = new LinearLayout(getApplicationContext());
-        final TextView txtView = new TextView(linearLayout.getContext());
-        final Button btn = new Button(linearLayout.getContext());
-        linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-        linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-
-
-        txtView.setText("Vizinho pau no toba!!!");
-        txtView.setTextSize(20);
-        txtView.setTextColor(Color.parseColor("#000000"));
-        btn.setId(R.id.selectionDetails);
-        btn.setText("Abrir");
-
-        //Seta os parametros
-        txtView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT));
-        txtView.setGravity(Gravity.CENTER);
-        txtView.setPadding(20, 20, 20, 20);
-        btn.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT));
-
-        //adiciona no containerAddress
-        linearLayout.addView(txtView);
-        linearLayout.addView(btn);
-        containerAddress.addView(linearLayout);
     }
 }

@@ -61,6 +61,7 @@ public class Inicial extends AppCompatActivity
     private TextView likes;
     private TextView dislikes;
     private Integer id;
+    private Usuario usuario;
 
     private TextView nav_user;
     private TextView nav_cel;
@@ -69,7 +70,16 @@ public class Inicial extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        boolean bCor = SP.getBoolean("Tema",false);
+        if(bCor){
+            setTheme(R.style.AppTheme);
+        }else{
+            setTheme(R.style.AppTheme2);
+        }
+
         setContentView(R.layout.inicial);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -102,14 +112,73 @@ public class Inicial extends AppCompatActivity
 
         final double log = Double.parseDouble(pref.getString("log", "0"));
 
+        ChamadaWeb chamada = new ChamadaWeb("http://"+
+                PreferenceManager.getDefaultSharedPreferences(Inicial.this).getString("ENDERECOSERVIDOR", "10.0.0.2")
+                + ":8090/IntegradorWS/rest/servicos/trazum",id);
+        chamada.execute();
+
         likes.setText(pref.getString("likes", "0"));
         dislikes.setText(pref.getString("dislikes", "0"));
         nav_user.setText(pref.getString("nome", "0"));
         nav_cel.setText(pref.getString("cel", "0"));
         progress.dismiss();
-
     }
 
+    private class ChamadaWeb extends AsyncTask<String, Void, String> {
+        private String enderecoWeb;
+        private int idUsuario;
+        private int tipoChamada;  //1 - GET 2 - POST
+
+
+        public ChamadaWeb(String endereco, int id) {
+
+            enderecoWeb = endereco;
+            idUsuario = id;
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            HttpClient cliente = HttpClientBuilder.create().build();
+
+            try {
+                HttpPost chamada = new HttpPost(enderecoWeb);
+                List<NameValuePair> parametros = new ArrayList<NameValuePair>(1); //o 2 eh referente ao numero de params
+
+                parametros.add(new BasicNameValuePair("id", String.valueOf(idUsuario)));
+
+                chamada.setEntity(new UrlEncodedFormEntity(parametros));
+                HttpResponse resposta = cliente.execute(chamada);
+                String responseBody = EntityUtils.toString(resposta.getEntity()); // eh a resposta da servlet
+                return responseBody;
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+
+
+        public void onPostExecute(String resultado){
+
+            if(resultado!=null) {
+                Gson gson = new Gson();
+                System.out.println("----------------------------" + resultado);
+                usuario = gson.fromJson(resultado, Usuario.class);
+                System.out.println(usuario.getLikes().toString()+"-"+usuario.getDislikes().toString()+"-"+
+                        usuario.getNome().toString()+"-"+usuario.getTelefone().toString());
+
+
+                SharedPreferences pref = getApplicationContext().getSharedPreferences("usuario", 0); // 0 - for private mode
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putString("nome", usuario.getNome().toString() );
+                editor.putString("cel", usuario.getTelefone().toString() );
+                editor.putString("likes", usuario.getLikes().toString() );
+                editor.putString("dislikes", usuario.getDislikes().toString() );
+                editor.commit();
+            }
+        }
+    }
 
     @Override
     public void onBackPressed() {
@@ -159,6 +228,8 @@ public class Inicial extends AppCompatActivity
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 finishAffinity();
             }
+        } else if (id == R.id.nav_info) {
+            Toast.makeText(Inicial.this, "Caroline Scherer\nFrederico Dellani\nJeremy Rauber", Toast.LENGTH_SHORT).show();
         }
 
         try {
